@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monuments of India</title>
+  <meta name="description" content="Famous monuments from every state and union territory of India, with photos and facts. A 9th-grade school project.">
+  <meta name="theme-color" content="#c2410c">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="flag-strip"></div>
+
+  <header class="wrap hero">
+    <h1>Monuments of <span>India</span></h1>
+    <p id="intro">One famous monument from every state and union territory.</p>
+  </header>
+
+  <div class="tools">
+    <div class="wrap">
+      <input id="search" class="search" type="search" placeholder="Search a monument or state…" aria-label="Search monuments">
+      <div class="chips" role="group" aria-label="Filter">
+        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="State" aria-pressed="false">States</button>
+        <button class="chip" data-filter="Union Territory" aria-pressed="false">Union Territories</button>
+        <button class="chip" data-filter="unesco" aria-pressed="false">UNESCO sites</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap" id="list"></main>
+
+  <footer class="wrap">
+    A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const list = document.getElementById("list");
+    const search = document.getElementById("search");
+    let filter = "all";
+
+    const states = new Set(MONUMENTS.map(m => m.state));
+    document.getElementById("intro").textContent =
+      `${MONUMENTS.length} famous monuments from all ${states.size} states and union territories. Tap one to learn more!`;
+
+    function render() {
+      const q = search.value.trim().toLowerCase();
+      const shown = MONUMENTS.filter(m =>
+        (filter === "all" || m.region === filter || (filter === "unesco" && m.unesco.startsWith("Yes"))) &&
+        (!q || (m.name + " " + m.state + " " + m.location).toLowerCase().includes(q)));
+
+      // sorted by state name, states first, then union territories
+      shown.sort((a, b) => (a.region === b.region ? 0 : a.region === "State" ? -1 : 1) || a.state.localeCompare(b.state));
+
+      list.innerHTML = shown.length ? `<div class="grid">${shown.map(m => `
+        <a class="card" href="monument.html?id=${encodeURIComponent(m.id)}">
+          <img src="images/thumbs/${esc(m.id)}.jpg" alt="${esc(m.name)}" loading="lazy" width="480" height="360">
+          <div><strong>${esc(m.name)}</strong><span>${esc(m.state)}</span>${m.region === "Union Territory" ? '<span class="ut">UT</span>' : ""}</div>
+        </a>`).join("")}</div>`
+        : `<p class="empty">No monuments match “${esc(search.value)}”.</p>`;
+    }
+
+    search.addEventListener("input", render);
+    document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+      filter = b.dataset.filter;
+      document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b));
+      render();
+    }));
+    render();
+  </script>
+</body>
+</html>

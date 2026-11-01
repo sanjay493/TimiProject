@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Code Sheet · Monuments of India</title>
+  <style>
+    :root { --accent: #c2410c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px; font: 15px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; color: #222; background: #fff; }
+    .controls { max-width: 900px; margin: 0 auto 16px; padding: 12px 14px; background: #fdf1e7; border-radius: 10px; }
+    .controls h1 { font-size: 1.2rem; margin: 0 0 6px; }
+    .controls p { margin: 4px 0; }
+    .controls button, .controls select { font: inherit; padding: 6px 12px; margin-right: 8px; }
+    .controls button { background: var(--accent); color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+
+    .sheet { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); max-width: 900px; margin: 0 auto; }
+    .tag {
+      border: 2px dashed #bbb; border-radius: 10px; padding: 10px; text-align: center;
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .tag img { width: 100%; max-width: 200px; margin: 0 auto; display: block; image-rendering: pixelated; }
+    .tag strong { display: block; font-size: 1rem; margin-top: 4px; }
+    .tag span { font-size: .8rem; color: #666; }
+    .tag .scan { font-size: .75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+    .tag.home { border-color: var(--accent); border-style: solid; }
+
+    /* Large: one sign per page, to stand next to each display */
+    body.large .sheet { grid-template-columns: 1fr; }
+    body.large .tag { border: 0; page-break-after: always; break-after: page; padding: 40px 10px; }
+    body.large .tag img { max-width: 420px; }
+    body.large .tag strong { font-size: 2rem; margin-top: 14px; }
+    body.large .tag span { font-size: 1.2rem; }
+    body.large .tag .scan { font-size: 1.1rem; }
+
+    @media (max-width: 600px) { .sheet { grid-template-columns: repeat(2, 1fr); } }
+    @media print {
+      body { padding: 0; }
+      .controls { display: none; }
+      .sheet { max-width: none; }
+      @page { margin: 10mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>Printable QR codes</h1>
+    <p>Each code opens that monument's page on the visitor's phone.</p>
+    <p id="url"></p>
+    <p>
+      <select id="size" aria-label="Layout">
+        <option value="small">Small — many per page (cut out)</option>
+        <option value="large">Large — one sign per page</option>
+      </select>
+      <button onclick="window.print()">Print</button>
+    </p>
+  </div>
+
+  <div class="sheet" id="sheet"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    document.getElementById("url").innerHTML = `QR codes point to: <b>${esc(SITE_URL)}</b> (change in <code>js/config.js</code>, then run <code>python tools/make_qr.py</code>)`;
+
+    document.getElementById("sheet").innerHTML =
+      `<div class="tag home">
+         <div class="scan">Scan to explore</div>
+         <img src="qr/home.png" alt="QR code for all monuments">
+         <strong>All Monuments of India</strong><span>${MONUMENTS.length} monuments · every state &amp; UT</span>
+       </div>` +
+      MONUMENTS.map(m => `
+       <div class="tag">
+         <div class="scan">Scan to learn more</div>
+         <img src="qr/${esc(m.id)}.png" alt="QR code for ${esc(m.name)}">
+         <strong>${esc(m.name)}</strong><span>${esc(m.state)}</span>
+       </div>`).join("");
+
+    const size = document.getElementById("size");
+    size.addEventListener("change", () => document.body.classList.toggle("large", size.value === "large"));
+  </script>
+</body>
+</html>
