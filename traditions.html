@@ -23,7 +23,7 @@
     <div id="kinds"></div>
 
     <!-- Languages & Literature -->
-    <section class="panel trad-panel">
+    <section class="panel trad-panel" id="languages">
       <h2>📖 Languages &amp; Literature</h2>
       <p class="lead">India has <b>22 scheduled languages</b> in its Constitution and hundreds more spoken across the country. Here is <b>“Bharat”</b> (India) in some of them:</p>
       <div class="scripts">
@@ -55,7 +55,7 @@
     </section>
 
     <!-- Living Heritage & Sustainability -->
-    <section class="panel trad-panel">
+    <section class="panel trad-panel" id="sustainability">
       <h2>🌱 Living Heritage &amp; Sustainability</h2>
       <p class="lead">Traditions stay alive when we use them, value them and pass them on.</p>
       <ul class="ticks green">
@@ -91,16 +91,16 @@
     renderNav("traditions");
 
     const KINDS = [
-      ["Art & Craft", "🎨 Art Forms", "Paintings, embroidery and weaving, each with its own style and story."],
-      ["Dance", "💃 Dance & Music", "Classical and folk dances, many performed with live music and drums."],
-      ["Festival", "🪔 Festivals", "Celebrations that bring people together across regions and cultures."]
+      ["art", "Art & Craft", "🎨 Art Forms", "Paintings, embroidery and weaving, each with its own style and story."],
+      ["dance", "Dance", "💃 Dance & Music", "Classical and folk dances, many performed with live music and drums."],
+      ["festivals", "Festival", "🪔 Festivals", "Celebrations that bring people together across regions and cultures."]
     ];
     const credit = id => (typeof TRADITION_CREDITS !== "undefined" && TRADITION_CREDITS[id]) || null;
 
-    document.getElementById("kinds").innerHTML = KINDS.map(([kind, title, lead]) => {
+    document.getElementById("kinds").innerHTML = KINDS.map(([anchor, kind, title, lead]) => {
       const items = TRADITIONS.filter(t => t.kind === kind);
       return `
-        <section class="panel trad-panel">
+        <section class="panel trad-panel" id="${anchor}">
           <h2>${title}</h2>
           <p class="lead">${lead} <span class="hint">Swipe →</span></p>
           <div class="trad-row">
@@ -114,6 +114,8 @@
           </div>
         </section>`;
     }).join("");
+
+    if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
 
     const LANGS = ["Assamese", "Bengali", "Bodo", "Dogri", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Maithili", "Malayalam",
                    "Manipuri", "Marathi", "Nepali", "Odia", "Punjabi", "Sanskrit", "Santali", "Sindhi", "Tamil", "Telugu", "Urdu"];

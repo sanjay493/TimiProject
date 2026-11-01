@@ -27,6 +27,46 @@
   </header>
   <div class="band" aria-hidden="true"></div>
 
+  <!-- ===== Our Heritage, Our Identity (left panel of the exhibition board) ===== -->
+  <section class="wrap" id="heritage">
+    <div class="heritage-board">
+      <h2 class="board-title">Our Heritage<br>Our Identity</h2>
+      <div class="heritage-list">
+        <a class="heritage-row" href="#monuments">
+          <img src="images/thumbs/konark-sun-temple.jpg" alt="" width="480" height="360">
+          <div><h3>Architectural Heritage</h3>
+            <p>Iconic monuments that reflect India's rich history and architecture.</p>
+            <span class="count" id="c-mon"></span></div>
+        </a>
+        <a class="heritage-row" href="traditions.html#art">
+          <img src="images/traditions/thumbs/madhubani.jpg" alt="" width="480" height="360">
+          <div><h3>Traditional Art</h3>
+            <p>Unique art forms like Madhubani, Warli and Pattachitra.</p>
+            <span class="count" id="c-art"></span></div>
+        </a>
+        <a class="heritage-row" href="traditions.html#dance">
+          <img src="images/traditions/thumbs/bharatanatyam.jpg" alt="" width="480" height="360">
+          <div><h3>Music &amp; Dance</h3>
+            <p>A diverse range of classical and folk dance and music traditions.</p>
+            <span class="count" id="c-dance"></span></div>
+        </a>
+        <a class="heritage-row" href="traditions.html#festivals">
+          <img src="images/traditions/thumbs/durga-puja.jpg" alt="" width="480" height="360">
+          <div><h3>Festivals</h3>
+            <p>Celebrations that bring people together across regions and cultures.</p>
+            <span class="count" id="c-fest"></span></div>
+        </a>
+        <a class="heritage-row" href="traditions.html#languages">
+          <div class="book-art" aria-hidden="true"><span lang="hi">अ</span><span lang="ta">த</span><span lang="bn">ক</span><span lang="te">మ</span></div>
+          <div><h3>Languages &amp; Literature</h3>
+            <p>A rich tapestry of languages, literature and storytelling.</p>
+            <span class="count">22 scheduled languages →</span></div>
+        </a>
+      </div>
+      <div class="skyline board-skyline" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <!-- ===== Map ===== -->
   <section class="wrap" id="map">
     <h2 class="plaque">Explore by Map</h2>
@@ -57,8 +97,8 @@
   </section>
 
   <!-- ===== Monument list ===== -->
-  <h2 class="plaque" id="monuments">Our Heritage, Our Identity</h2>
-  <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
+  <h2 class="plaque" id="monuments">Architectural Heritage</h2>
+  <p class="plaque-sub">Iconic monuments from every state and union territory · tap one to explore</p>
 
   <div class="monument-area">
   <div class="tools">
@@ -96,6 +136,13 @@
   <script>
     renderNav("home");
     renderPlaySection(document.getElementById("play"));
+
+    // live counts on the "Our Heritage, Our Identity" panel
+    const kindCount = k => TRADITIONS.filter(t => t.kind === k).length;
+    document.getElementById("c-mon").textContent = `${MONUMENTS.length} monuments →`;
+    document.getElementById("c-art").textContent = `${kindCount("Art & Craft")} art forms →`;
+    document.getElementById("c-dance").textContent = `${kindCount("Dance")} dances →`;
+    document.getElementById("c-fest").textContent = `${kindCount("Festival")} festivals →`;
 
     // ---------------- Monument list ----------------
     const list = document.getElementById("list");
