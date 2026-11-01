@@ -60,6 +60,7 @@
   <h2 class="plaque" id="monuments">Our Heritage, Our Identity</h2>
   <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
 
+  <div class="monument-area">
   <div class="tools">
     <div class="wrap">
       <input id="search" class="search" type="search" placeholder="Search a monument or state…" aria-label="Search monuments">
@@ -73,10 +74,9 @@
   </div>
 
   <main class="wrap" id="list"></main>
-
-  <div class="wrap center" style="margin-top:26px">
-    <a class="btn" href="play.html">🎮 Explore &amp; Play</a>
   </div>
+
+  <section class="wrap play-section" id="play"></section>
 
   <footer>
     <div class="wrap">
@@ -87,6 +87,7 @@
     <div class="band" aria-hidden="true"></div>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/traditions.js"></script>
   <script src="js/tradition-credits.js"></script>
@@ -94,6 +95,7 @@
   <script src="js/common.js"></script>
   <script>
     renderNav("home");
+    renderPlaySection(document.getElementById("play"));
 
     // ---------------- Monument list ----------------
     const list = document.getElementById("list");

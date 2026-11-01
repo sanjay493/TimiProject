@@ -268,24 +268,6 @@ footer .band { margin-top: 0; }
 .mini strong { display: block; font: 700 1rem var(--display); color: var(--maroon); }
 .mini span { font-size: .85rem; color: var(--ink-soft); }
 
-/* ---------- Explore & Play hub ---------- */
-.games { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); margin-top: 18px; }
-.game-card {
-  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
-  text-decoration: none; color: var(--ink); padding: 18px 12px;
-  background: linear-gradient(var(--parchment), var(--parchment-2));
-  border: 2px solid var(--gold); border-radius: var(--radius);
-  box-shadow: inset 0 0 0 4px var(--parchment), inset 0 0 0 5px rgba(224, 176, 75, .7), 0 6px 16px rgba(0, 0, 0, .35);
-}
-.game-card .big { font-size: 2.6rem; line-height: 1; }
-.game-card strong { font: 700 1.05rem/1.2 var(--display); color: var(--maroon); }
-.game-card span { font-size: .85rem; color: var(--ink-soft); }
-.prize-note {
-  margin: 22px auto 0; max-width: 560px; text-align: center; padding: 14px 16px;
-  border: 2px dashed var(--gold); border-radius: var(--radius); color: var(--parchment);
-}
-.prize-note strong { color: var(--gold-light); font-family: var(--display); }
-
 /* ---------- Quiz pieces (shared by games) ---------- */
 .game { max-width: 620px; margin: 0 auto; }
 .scorebar { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 10px; font: 700 .9rem var(--display); color: var(--gold-light); }
@@ -422,6 +404,92 @@ footer .band { margin-top: 0; }
 .trad-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .trad-three .trad strong { font-size: .78rem; }
 .trad-three .trad-icon { font-size: 2.4rem; }
+/* ---------- Explore & Play (board style) ---------- */
+.play-section { margin-top: 34px; }
+.play-sign {
+  display: table; margin: 0 auto; padding: 10px 30px 12px; transform: rotate(-3deg);
+  background: linear-gradient(#fff8e6, var(--parchment-2)); border: 4px double var(--maroon); border-radius: 22px;
+  box-shadow: 0 0 0 4px var(--parchment), 0 0 0 7px var(--gold), 0 0 0 9px var(--maroon), 0 10px 24px rgba(0, 0, 0, .45);
+  text-align: center; line-height: 1;
+}
+.play-sign span { display: block; font: 700 clamp(2rem, 9vw, 3rem) var(--fancy); color: var(--maroon); }
+.play-sign span + span { margin-top: 4px; }
+.play-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); margin-top: 30px; }
+@media (min-width: 900px) { .play-grid { grid-template-columns: repeat(5, 1fr); } }
+.play-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+  text-decoration: none; color: var(--ink); padding: 14px 10px 12px;
+  background: linear-gradient(#fff8e6, var(--parchment-2)); border: 2px solid var(--gold); border-radius: 10px;
+  box-shadow: inset 0 0 0 4px var(--parchment), inset 0 0 0 5px rgba(224, 176, 75, .7), 0 6px 16px rgba(0, 0, 0, .4);
+  transition: transform .15s;
+}
+a.play-card:hover, a.play-card:focus-visible { transform: translateY(-3px) rotate(-1deg); }
+.play-card h3 { margin: 0; font: 700 1rem/1.15 var(--display); color: var(--ink); }
+.play-card p { margin: 0; font-size: .78rem; color: var(--ink-soft); }
+.ill { position: relative; width: 100%; height: 110px; }
+/* stacked monument photo cards */
+.ill-guess img {
+  position: absolute; width: 58%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; left: 21%; top: 14px;
+  border: 3px solid #fff; border-radius: 6px; box-shadow: 0 3px 8px rgba(0, 0, 0, .35);
+}
+.ill-guess img:nth-child(1) { transform: rotate(-12deg) translate(-14px, 4px); }
+.ill-guess img:nth-child(2) { transform: rotate(9deg) translate(14px, 2px); }
+.ill-guess img:nth-child(3) { transform: translateY(-4px); }
+/* two tradition cards */
+.ill-match img {
+  position: absolute; width: 44%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; top: 2px;
+  border: 3px solid #fff; border-radius: 6px; box-shadow: 0 3px 8px rgba(0, 0, 0, .35);
+}
+.ill-match img:first-child { left: 6%; transform: rotate(-6deg); }
+.ill-match img:last-child { right: 6%; transform: rotate(6deg); }
+/* mini spinning wheel */
+.mini-wheel {
+  position: absolute; left: 50%; top: 8px; width: 96px; height: 96px; margin-left: -48px; border-radius: 50%;
+  background: conic-gradient(#f9a8d4 0 60deg, #fdba74 0 120deg, #fde047 0 180deg, #86efac 0 240deg, #93c5fd 0 300deg, #c4b5fd 0);
+  border: 5px solid #b07a3a; box-shadow: 0 0 0 2px var(--gold), 0 4px 10px rgba(0, 0, 0, .35);
+  animation: slowspin 12s linear infinite;
+}
+.mini-wheel::after { content: ""; position: absolute; inset: 38%; border-radius: 50%; background: var(--gold); border: 2px solid var(--navy); }
+.ill-spin i {
+  position: absolute; left: 50%; top: 0; margin-left: -8px; width: 0; height: 0;
+  border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid var(--maroon);
+}
+@keyframes slowspin { to { transform: rotate(360deg); } }
+/* passport book + rubber stamp */
+.ill-pass .book {
+  position: absolute; left: 14%; top: 4px; width: 56%; height: 100px; transform: rotate(-4deg);
+  background: linear-gradient(160deg, #7a1a28, #4a0d16); border-radius: 4px 8px 8px 4px;
+  box-shadow: inset 6px 0 0 rgba(0, 0, 0, .25), inset 0 0 0 3px #5a111c, inset 0 0 0 4px var(--gold), 0 4px 10px rgba(0, 0, 0, .4);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+}
+.ill-pass .book b { font: 700 .62rem/1.1 var(--display); color: var(--gold-light); letter-spacing: .04em; text-transform: uppercase; }
+.ill-pass .book img { width: 36px; height: auto; }
+.ill-pass .rubber { position: absolute; right: 8%; bottom: 4px; width: 34px; height: 46px; }
+.ill-pass .rubber::before {
+  content: ""; position: absolute; left: 9px; top: 0; width: 16px; height: 26px; border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(90deg, #6b3b1f, #a8673a, #6b3b1f);
+}
+.ill-pass .rubber span {
+  position: absolute; left: 0; bottom: 0; width: 34px; height: 20px; border-radius: 4px;
+  background: linear-gradient(#c08a4a, #8a5a2b); box-shadow: inset 0 -5px 0 #8e1b2b;
+}
+/* prizes */
+.prize-card { grid-column: 1 / -1; background: linear-gradient(#fff3f6, #f8dbe4); }
+@media (min-width: 900px) { .prize-card { grid-column: auto; } }
+.prize-card h3 span {
+  display: inline-block; padding: 5px 18px; color: #fff; font-size: .95rem;
+  background: linear-gradient(#e8457a, #b8235a); border: 2px solid var(--gold);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%, 10px 50%);
+}
+.gifts { font-size: 2.6rem; line-height: 1.1; letter-spacing: .1em; white-space: nowrap; }
+.gifts span { display: inline-block; font-size: 3.2rem; transform: translateY(-6px); }
+@media (min-width: 900px) {
+  .gifts { font-size: 1.9rem; letter-spacing: 0; }
+  .gifts span { font-size: 2.4rem; }
+  .prize-card p { font-size: .8rem; }
+}
+.prize-card p { font-size: .85rem; color: var(--ink); }
+
 @media (max-width: 420px) {
   .mainnav { gap: 4px; padding: 10px 6px 0; }
   .mainnav a { padding: 5px 8px; font-size: .66rem; }
@@ -433,4 +501,6 @@ footer .band { margin-top: 0; }
   .card { transition: none; }
   .wheel { transition-duration: .01s; }
   .tile.shake { animation: none; }
+  .mini-wheel { animation: none; }
+  a.play-card { transition: none; }
 }

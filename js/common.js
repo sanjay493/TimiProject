@@ -48,6 +48,48 @@ const prizeGoal = () => (typeof PRIZE_STAMPS === "number" ? PRIZE_STAMPS : 5);
 const photoOf = id => (typeof IMAGE_CREDITS !== "undefined" && IMAGE_CREDITS[id]) ? IMAGE_CREDITS[id].file : `images/${id}.jpg`;
 const thumbOf = id => `images/thumbs/${id}.jpg`;
 
+// "Explore & Play" section, styled like the exhibition board (used on index.html and play.html)
+function renderPlaySection(el) {
+  if (!el) return;
+  const got = Passport.count(), goal = prizeGoal();
+  el.innerHTML = `
+    <div class="play-sign" role="heading" aria-level="2"><span>Explore</span><span>&amp; Play</span></div>
+    <div class="play-grid">
+      <a class="play-card" href="guess.html">
+        <h3>Guess the<br>Monument</h3>
+        <div class="ill ill-guess" aria-hidden="true">
+          <img src="${thumbOf("konark-sun-temple")}" alt=""><img src="${thumbOf("hawa-mahal")}" alt=""><img src="${thumbOf("taj-mahal")}" alt="">
+        </div>
+        <p>Photo quiz · 10 questions</p>
+      </a>
+      <a class="play-card" href="match.html">
+        <h3>Match the<br>Tradition</h3>
+        <div class="ill ill-match" aria-hidden="true">
+          <img src="images/traditions/thumbs/garba.jpg" alt=""><img src="images/traditions/thumbs/bhangra.jpg" alt="">
+        </div>
+        <p>Dances, arts &amp; festivals</p>
+      </a>
+      <a class="play-card" href="spin.html">
+        <h3>Spin &amp;<br>Answer</h3>
+        <div class="ill ill-spin" aria-hidden="true"><div class="mini-wheel"></div><i></i></div>
+        <p>Spin the wheel, win points</p>
+      </a>
+      <a class="play-card" href="passport.html">
+        <h3>Heritage<br>Passport</h3>
+        <div class="ill ill-pass" aria-hidden="true">
+          <div class="book"><b>Heritage<br>Passport</b><img src="images/lotus.svg" alt=""></div>
+          <div class="rubber"><span></span></div>
+        </div>
+        <p>${got} of ${MONUMENTS.length} stamps collected</p>
+      </a>
+      <div class="play-card prize-card">
+        <h3><span>Prizes for Winners</span></h3>
+        <div class="gifts" aria-hidden="true">🎁<span>🎁</span>🎁</div>
+        <p>Collect <b>${goal} passport stamps</b> by scanning our QR codes, or score <b>8+</b> in Guess the Monument — then show your screen at our stall!</p>
+      </div>
+    </div>`;
+}
+
 // Navigation bar shown on every page:  <nav class="mainnav" id="nav"></nav>
 function renderNav(active) {
   const el = document.getElementById("nav");
