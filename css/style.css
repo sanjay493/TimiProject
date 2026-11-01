@@ -258,7 +258,7 @@ footer .band { margin-top: 0; }
   font: 700 9px var(--display); fill: #2b1a0c; text-anchor: middle; pointer-events: none;
   paint-order: stroke; stroke: rgba(255, 255, 255, .7); stroke-width: 2.2px;
 }
-.compass { position: absolute; left: 2%; bottom: 27%; width: 15%; max-width: 70px; opacity: .9; pointer-events: none; }
+.compass { position: absolute; right: 4%; top: 3%; width: 15%; max-width: 70px; opacity: .9; pointer-events: none; }
 .map-pick { display: block; width: 100%; max-width: 560px; margin: 12px auto 0; padding: 10px 14px; border-radius: 999px; border: 2px solid var(--gold); background: var(--parchment); color: var(--ink); font: 1rem var(--body); }
 .map-info { max-width: 560px; margin: 14px auto 0; }
 .map-info .panel { margin: 0; }
@@ -404,6 +404,45 @@ footer .band { margin-top: 0; }
 .trad-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .trad-three .trad strong { font-size: .78rem; }
 .trad-three .trad-icon { font-size: 2.4rem; }
+/* ---------- Festive light borders (like the fairy lights on the board) ----------
+   Add class="lit" to any framed box. Two sets of bulbs twinkle in turn. */
+.lit { position: relative; }
+.lit::before, .lit::after {
+  content: ""; position: absolute; inset: 1px; pointer-events: none; z-index: 2; border-radius: inherit;
+  --bulb: radial-gradient(circle, #fffbe6 0 2px, #ffd45c 3px, rgba(255, 196, 64, .55) 4.5px, rgba(255, 196, 64, 0) 7px);
+  background:
+    var(--bulb) 0 0 / 28px 14px repeat-x,
+    var(--bulb) 0 100% / 28px 14px repeat-x,
+    var(--bulb) 0 0 / 14px 28px repeat-y,
+    var(--bulb) 100% 0 / 14px 28px repeat-y;
+  animation: bulbs 1.6s ease-in-out infinite alternate;
+}
+.lit::after {
+  background-position: 14px 0, 14px 100%, 0 14px, 100% 14px;   /* the in-between bulbs */
+  animation-delay: -1.6s;
+}
+@keyframes bulbs { from { opacity: .35; } to { opacity: 1; } }
+
+/* framed navy panel shared by the board-style sections */
+.board-frame {
+  max-width: 760px; margin: 0 auto; padding: 22px 16px 18px;
+  background: linear-gradient(var(--navy-2), var(--navy));
+  border: 3px solid var(--gold); border-radius: 16px;
+  box-shadow: inset 0 0 0 6px var(--navy), inset 0 0 0 8px var(--maroon), inset 0 0 0 10px var(--gold), 0 12px 28px rgba(0, 0, 0, .5);
+}
+.board-frame > .plaque:first-child { margin-top: 4px; }
+#map, #traditions { margin-top: 26px; }
+@media (min-width: 900px) { #traditions .board-frame { max-width: 1100px; } }
+
+/* title arch at the top, like the board's arched header */
+.title-arch {
+  max-width: 640px; margin: 34px auto 0; padding: 30px 18px 22px;
+  background: radial-gradient(ellipse at top, #24366a, var(--navy) 75%);
+  border: 3px solid var(--gold); border-radius: 50% 50% 18px 18px / 70px 70px 18px 18px;
+  box-shadow: inset 0 0 0 6px var(--navy), inset 0 0 0 8px var(--maroon), 0 0 30px rgba(248, 220, 142, .18);
+}
+.title-arch .lotus { margin-top: -62px; }
+
 /* ---------- Our Heritage, Our Identity (board's left panel) ---------- */
 #heritage { margin-top: 26px; }
 .heritage-board {
@@ -548,5 +587,6 @@ a.play-card:hover, a.play-card:focus-visible { transform: translateY(-3px) rotat
   .wheel { transition-duration: .01s; }
   .tile.shake { animation: none; }
   .mini-wheel { animation: none; }
+  .lit::before, .lit::after { animation: none; }
   a.play-card { transition: none; }
 }

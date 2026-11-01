@@ -18,9 +18,11 @@
 
   <header class="hero">
     <div class="wrap">
-      <img class="lotus" src="images/lotus.svg" alt="" width="80" height="48">
-      <h1><span class="india">India</span><span class="museum">A Living Museum</span></h1>
-      <div class="ribbon">Timeless Traditions • Vibrant Cultures •&nbsp;A&nbsp;Shared&nbsp;Tomorrow</div>
+      <div class="title-arch lit">
+        <img class="lotus" src="images/lotus.svg" alt="" width="80" height="48">
+        <h1><span class="india">India</span><span class="museum">A Living Museum</span></h1>
+        <div class="ribbon">Timeless Traditions • Vibrant Cultures •&nbsp;A&nbsp;Shared&nbsp;Tomorrow</div>
+      </div>
       <p class="intro" id="intro">One famous monument from every state and union territory.</p>
     </div>
     <div class="skyline" aria-hidden="true"></div>
@@ -29,7 +31,7 @@
 
   <!-- ===== Our Heritage, Our Identity (left panel of the exhibition board) ===== -->
   <section class="wrap" id="heritage">
-    <div class="heritage-board">
+    <div class="heritage-board lit">
       <h2 class="board-title">Our Heritage<br>Our Identity</h2>
       <div class="heritage-list">
         <a class="heritage-row" href="#monuments">
@@ -69,6 +71,7 @@
 
   <!-- ===== Map ===== -->
   <section class="wrap" id="map">
+   <div class="board-frame lit">
     <h2 class="plaque">Explore by Map</h2>
     <p class="plaque-sub">Tap a state to see its monuments and traditions</p>
     <div class="map-box">
@@ -86,14 +89,17 @@
       <option value="">…or choose a state / union territory</option>
     </select>
     <div class="map-info" id="info" aria-live="polite"></div>
+   </div>
   </section>
 
   <!-- ===== Living traditions preview (same picks as the exhibition board) ===== -->
   <section class="wrap" id="traditions">
+   <div class="board-frame lit">
     <h2 class="plaque">India's Living Traditions</h2>
     <p class="plaque-sub">Art, dance and festivals from across India</p>
     <div class="trad-preview" id="trad-preview"></div>
     <div class="center" style="margin-top:16px"><a class="btn" href="traditions.html">See all traditions →</a></div>
+   </div>
   </section>
 
   <!-- ===== Monument list ===== -->
