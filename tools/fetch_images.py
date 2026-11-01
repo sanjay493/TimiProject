@@ -1,12 +1,13 @@
 """
-Downloads one freely licensed photo per monument from Wikimedia Commons.
+Downloads one freely licensed photo per monument and per tradition
+from Wikimedia Commons.
 
-For each monument in js/data.js it:
+For each entry in js/data.js (monuments) and js/traditions.js (traditions) it:
   1. uses the "image" file if given, otherwise asks Wikipedia for the
      main (free) image of the "wiki" page,
   2. checks the image's licence on Wikimedia Commons,
-  3. saves a 960px-wide copy to images/<id>.jpg (or .png),
-  4. records the photographer and licence in js/image-credits.js.
+  3. saves a 960px-wide JPEG (and a 480px thumbnail),
+  4. records the photographer and licence in a credits file.
 
 Run from the project folder:   python tools/fetch_images.py
 Use --force to re-download images that already exist.
@@ -22,12 +23,15 @@ from html import unescape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "js" / "data.js"
-IMG_DIR = ROOT / "images"
-CREDITS = ROOT / "js" / "image-credits.js"
 WIDTH = 960  # a standard Wikimedia thumbnail size
 HEADERS = {"User-Agent": "IndiaMonumentsSchoolProject/1.0 (educational static site)"}
-FREE = ("cc", "public domain", "pd", "gfdl", "attribution", "fal", "free art")
+FREE = ("cc", "public domain", "pd", "gfdl", "attribution", "fal", "free art", "godl")
+
+# (list file, image folder, credits file, JavaScript variable name)
+COLLECTIONS = [
+    ("js/data.js", "images", "js/image-credits.js", "IMAGE_CREDITS"),
+    ("js/traditions.js", "images/traditions", "js/tradition-credits.js", "TRADITION_CREDITS"),
+]
 
 
 def fetch(url, timeout=60):
@@ -46,16 +50,16 @@ def fetch(url, timeout=60):
 
 
 def shrink(path):
-    """Save as a compressed JPEG (smaller = faster on phones). Needs Pillow."""
+    """Save as a compressed JPEG (smaller = faster on phones), plus a thumbnail. Needs Pillow."""
     from PIL import Image
     img = Image.open(path).convert("RGB")
     img.thumbnail((WIDTH, WIDTH))
     jpg = path.with_suffix(".jpg")
     img.save(jpg, "JPEG", quality=78, optimize=True, progressive=True)
-    # small copy for the cards on the home page
-    (IMG_DIR / "thumbs").mkdir(exist_ok=True)
+    thumbs = path.parent / "thumbs"
+    thumbs.mkdir(exist_ok=True)
     img.thumbnail((480, 480))
-    img.save(IMG_DIR / "thumbs" / jpg.name, "JPEG", quality=72, optimize=True, progressive=True)
+    img.save(thumbs / jpg.name, "JPEG", quality=72, optimize=True, progressive=True)
     if path != jpg:
         path.unlink()
     return jpg
@@ -70,22 +74,31 @@ def strip_html(s):
     return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", "", s or ""))).strip()
 
 
-def load_monuments():
-    """Return (id, wiki title, optional Commons file name) for each monument."""
-    text = DATA.read_text(encoding="utf-8")
+def load_entries(list_file):
+    """Return (id, wiki title, optional Commons file name) for each entry."""
+    text = (ROOT / list_file).read_text(encoding="utf-8")
     out = []
-    for block in re.split(r'(?=\n\s*id:\s*")', text)[1:]:
-        field = lambda k: (re.search(k + r':\s*"([^"]*)"', block) or [None, None])[1]
+    for block in re.split(r'(?=\bid:\s*")', text)[1:]:
+        field = lambda k: (re.search(r"\b" + k + r':\s*"([^"]*)"', block) or [None, None])[1]
         out.append((field("id"), field("wiki"), field("image")))
     return out
 
 
 def page_image(title):
+    """Main free image of a Wikipedia page; if the page has none, try the top search result."""
+    def lookup(t):
+        d = get_json("https://en.wikipedia.org/w/api.php", {
+            "action": "query", "prop": "pageimages", "piprop": "name", "titles": t, "redirects": 1})
+        pages = d["query"]["pages"]
+        return pages[0].get("pageimage") if pages else None
+
+    found = lookup(title)
+    if found:
+        return found
     d = get_json("https://en.wikipedia.org/w/api.php", {
-        "action": "query", "prop": "pageimages", "piprop": "name",
-        "titles": title, "redirects": 1})
-    pages = d["query"]["pages"]
-    return pages[0].get("pageimage") if pages else None
+        "action": "query", "list": "search", "srsearch": title, "srlimit": 1})
+    hits = d["query"]["search"]
+    return lookup(hits[0]["title"]) if hits else None
 
 
 def commons_info(filename):
@@ -98,17 +111,18 @@ def commons_info(filename):
     return page["imageinfo"][0]
 
 
-def main():
-    force = "--force" in sys.argv
-    IMG_DIR.mkdir(exist_ok=True)
+def run(list_file, img_folder, credits_file, var_name, force):
+    img_dir = ROOT / img_folder
+    img_dir.mkdir(parents=True, exist_ok=True)
+    credits_path = ROOT / credits_file
     old = {}
-    if CREDITS.exists():
-        m = re.search(r"=\s*(\{.*\});", CREDITS.read_text(encoding="utf-8"), re.S)
+    if credits_path.exists():
+        m = re.search(r"=\s*(\{.*\});", credits_path.read_text(encoding="utf-8"), re.S)
         if m:
             old = json.loads(m.group(1))
 
     credits, problems = {}, []
-    for mid, title, chosen in load_monuments():
+    for mid, title, chosen in load_entries(list_file):
         chosen_changed = chosen and mid in old and chosen.replace(" ", "_") not in old[mid]["page"]
         if not force and not chosen_changed and mid in old and (ROOT / old[mid]["file"]).exists():
             credits[mid] = old[mid]
@@ -126,11 +140,11 @@ def main():
                 continue
             src = info.get("thumburl") or info["url"]
             ext = ".png" if src.lower().endswith(".png") else ".jpg"
-            out = IMG_DIR / (mid + ext)
+            out = img_dir / (mid + ext)
             out.write_bytes(fetch(src))
-            out, ext = shrink(out), ".jpg"
+            shrink(out)
             credits[mid] = {
-                "file": f"images/{mid}{ext}",
+                "file": f"{img_folder}/{mid}.jpg",
                 "page": info["descriptionurl"],
                 "artist": strip_html(meta.get("Artist", {}).get("value", "")) or "Unknown",
                 "license": lic,
@@ -141,11 +155,19 @@ def main():
         except Exception as e:  # keep going; report at the end
             problems.append(f"{mid}: {e}")
 
-    CREDITS.write_text(
+    credits_path.write_text(
         "// Generated by tools/fetch_images.py — photo credits from Wikimedia Commons.\n"
-        "const IMAGE_CREDITS = " + json.dumps(credits, indent=2, ensure_ascii=False) + ";\n",
+        f"const {var_name} = " + json.dumps(credits, indent=2, ensure_ascii=False) + ";\n",
         encoding="utf-8")
-    print(f"\n{len(credits)} images ready.")
+    print(f"{list_file}: {len(credits)} images ready.\n")
+    return problems
+
+
+def main():
+    force = "--force" in sys.argv
+    problems = []
+    for collection in COLLECTIONS:
+        problems += run(*collection, force)
     if problems:
         print("Problems:\n  " + "\n  ".join(problems))
         sys.exit(1)

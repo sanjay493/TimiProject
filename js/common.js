@@ -55,6 +55,7 @@ function renderNav(active) {
   const links = [
     ["home", "index.html", "🏛️", "Monuments"],
     ["map", "index.html#map", "🗺️", "Map"],
+    ["traditions", "traditions.html", "🪔", "Traditions"],
     ["play", "play.html", "🎮", "Play"],
     ["passport", "passport.html", "📕", "Passport"]
   ];

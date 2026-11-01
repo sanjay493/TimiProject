@@ -11,6 +11,7 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 |---|---|
 | `index.html` | Home page: tappable map of India, plus all monuments with search and filters |
 | `monument.html` | One page that shows any monument, e.g. `monument.html?id=taj-mahal`. Opening it adds a passport stamp |
+| `traditions.html` | **India's Living Traditions**: art forms, dance & music, festivals, languages & literature, living heritage & sustainability |
 | `play.html` | **Explore & Play**: links to the games |
 | `guess.html` | Guess the Monument: photo quiz, 10 questions |
 | `match.html` | Match the Tradition: pair dances, arts and festivals with their states |
@@ -18,7 +19,9 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 | `passport.html` | Heritage Passport: the stamps a visitor has collected, and a prize message |
 | `qr-sheet.html` | Printable QR codes: small cut-outs, or one large sign per page |
 | `js/data.js` | **All the monument content.** Edit this to change facts or add monuments |
-| `js/traditions.js` | Dances, art forms and festivals used by the games and the map |
+| `js/traditions.js` | Dances, art forms and festivals, used by the Traditions page, the games and the map |
+| `js/tradition-credits.js` | Photo credits for traditions (made automatically) |
+| `images/traditions/` | Tradition photos (from Wikimedia Commons) |
 | `js/india-map.js` | State outlines for the map (from [@svg-maps/india](https://github.com/VictorCazanave/svg-maps), CC BY 4.0) |
 | `js/common.js` | Shared code: navigation bar, passport stamps, helpers |
 | `js/config.js` | The site's web address (used for the QR codes) and `PRIZE_STAMPS`, the number of stamps that wins a prize |

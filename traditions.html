@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Living Traditions · India, A Living Museum</title>
+  <meta name="description" content="India's living traditions: art forms, dance and music, festivals, languages and literature from every part of India.">
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap">
+    <h1 class="plaque">India's Living Traditions</h1>
+    <p class="plaque-sub">Art, dance, music, festivals and languages that are still alive today — passed down from generation to generation.</p>
+
+    <div id="kinds"></div>
+
+    <!-- Languages & Literature -->
+    <section class="panel trad-panel">
+      <h2>📖 Languages &amp; Literature</h2>
+      <p class="lead">India has <b>22 scheduled languages</b> in its Constitution and hundreds more spoken across the country. Here is <b>“Bharat”</b> (India) in some of them:</p>
+      <div class="scripts">
+        <div><b lang="hi">भारत</b><span>Hindi</span></div>
+        <div><b lang="bn">ভারত</b><span>Bengali</span></div>
+        <div><b lang="ta">பாரதம்</b><span>Tamil</span></div>
+        <div><b lang="te">భారతదేశం</b><span>Telugu</span></div>
+        <div><b lang="kn">ಭಾರತ</b><span>Kannada</span></div>
+        <div><b lang="ml">ഭാരതം</b><span>Malayalam</span></div>
+        <div><b lang="gu">ભારત</b><span>Gujarati</span></div>
+        <div><b lang="pa">ਭਾਰਤ</b><span>Punjabi</span></div>
+        <div><b lang="or">ଭାରତ</b><span>Odia</span></div>
+        <div><b lang="as">ভাৰত</b><span>Assamese</span></div>
+        <div><b lang="ur" dir="rtl">بھارت</b><span>Urdu</span></div>
+        <div><b lang="sa">भारतम्</b><span>Sanskrit</span></div>
+      </div>
+
+      <h3>The 22 scheduled languages</h3>
+      <div class="chips-static" id="langs"></div>
+
+      <h3>Did you know?</h3>
+      <ul class="ticks">
+        <li>Eleven languages have been declared <b>classical languages</b> of India, including Tamil, Sanskrit, Telugu, Kannada, Malayalam and Odia.</li>
+        <li><b>Rabindranath Tagore</b> became the first Asian to win the Nobel Prize in Literature, in 1913, for <i>Gitanjali</i>.</li>
+        <li>Our national anthem, <b>Jana Gana Mana</b>, was written by Tagore in Bengali.</li>
+        <li>The <b>Tirukkural</b>, written in Tamil by Thiruvalluvar, has 1,330 short couplets about living a good life.</li>
+        <li>The <b>Ramayana</b> and the <b>Mahabharata</b> are two great epics retold in almost every Indian language.</li>
+      </ul>
+    </section>
+
+    <!-- Living Heritage & Sustainability -->
+    <section class="panel trad-panel">
+      <h2>🌱 Living Heritage &amp; Sustainability</h2>
+      <p class="lead">Traditions stay alive when we use them, value them and pass them on.</p>
+      <ul class="ticks green">
+        <li>Preserving traditional crafts and skills.</li>
+        <li>Using local and eco-friendly materials — clay, cotton, bamboo, natural dyes.</li>
+        <li>Supporting artisans and local communities by buying handmade products.</li>
+        <li>Passing our heritage to future generations through stories, songs and festivals.</li>
+        <li>Many crafts, like Madhubani painting, Kashmir Pashmina and Muga silk, have a <b>GI tag</b> (Geographical Indication), which protects their name and their makers.</li>
+      </ul>
+    </section>
+
+    <div class="center" style="margin-top:6px">
+      <a class="btn" href="match.html">💃 Play Match the Tradition</a>
+    </div>
+
+    <details class="credits">
+      <summary>Photo credits</summary>
+      <div id="credits"></div>
+    </details>
+  </main>
+
+  <footer>
+    <div class="wrap">A 9th-grade school project · India, A Living Museum · Photos from Wikimedia Commons</div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/traditions.js"></script>
+  <script src="js/tradition-credits.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("traditions");
+
+    const KINDS = [
+      ["Art & Craft", "🎨 Art Forms", "Paintings, embroidery and weaving, each with its own style and story."],
+      ["Dance", "💃 Dance & Music", "Classical and folk dances, many performed with live music and drums."],
+      ["Festival", "🪔 Festivals", "Celebrations that bring people together across regions and cultures."]
+    ];
+    const credit = id => (typeof TRADITION_CREDITS !== "undefined" && TRADITION_CREDITS[id]) || null;
+
+    document.getElementById("kinds").innerHTML = KINDS.map(([kind, title, lead]) => {
+      const items = TRADITIONS.filter(t => t.kind === kind);
+      return `
+        <section class="panel trad-panel">
+          <h2>${title}</h2>
+          <p class="lead">${lead} <span class="hint">Swipe →</span></p>
+          <div class="trad-row">
+            ${items.map(t => `
+              <a class="trad" href="index.html?state=${encodeURIComponent(t.state)}#map" title="See ${esc(t.state)} on the map">
+                ${credit(t.id)
+                  ? `<img src="images/traditions/thumbs/${esc(t.id)}.jpg" alt="${esc(t.name)}" loading="lazy" width="480" height="360">`
+                  : `<div class="trad-icon" aria-hidden="true">${t.icon}</div>`}
+                <strong>${esc(t.name)}</strong><span>${esc(t.state)}</span>
+              </a>`).join("")}
+          </div>
+        </section>`;
+    }).join("");
+
+    const LANGS = ["Assamese", "Bengali", "Bodo", "Dogri", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Maithili", "Malayalam",
+                   "Manipuri", "Marathi", "Nepali", "Odia", "Punjabi", "Sanskrit", "Santali", "Sindhi", "Tamil", "Telugu", "Urdu"];
+    document.getElementById("langs").innerHTML = LANGS.map(l => `<span>${l}</span>`).join("");
+
+    document.getElementById("credits").innerHTML = TRADITIONS.filter(t => credit(t.id)).map(t => {
+      const c = credit(t.id);
+      return `<p>${esc(t.name)}: ${esc(c.artist)} · <a href="${esc(c.page)}" target="_blank" rel="noopener">${esc(c.license)}</a></p>`;
+    }).join("");
+  </script>
+</body>
+</html>

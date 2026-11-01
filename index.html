@@ -48,6 +48,14 @@
     <div class="map-info" id="info" aria-live="polite"></div>
   </section>
 
+  <!-- ===== Living traditions preview (same picks as the exhibition board) ===== -->
+  <section class="wrap" id="traditions">
+    <h2 class="plaque">India's Living Traditions</h2>
+    <p class="plaque-sub">Art, dance and festivals from across India</p>
+    <div class="trad-preview" id="trad-preview"></div>
+    <div class="center" style="margin-top:16px"><a class="btn" href="traditions.html">See all traditions →</a></div>
+  </section>
+
   <!-- ===== Monument list ===== -->
   <h2 class="plaque" id="monuments">Our Heritage, Our Identity</h2>
   <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
@@ -81,6 +89,7 @@
 
   <script src="js/data.js"></script>
   <script src="js/traditions.js"></script>
+  <script src="js/tradition-credits.js"></script>
   <script src="js/india-map.js"></script>
   <script src="js/common.js"></script>
   <script>
@@ -185,11 +194,33 @@
               <img src="${thumbOf(esc(m.id))}" alt="" width="84" height="63">
               <div><strong>${esc(m.name)}</strong><span>${esc(m.state)} · tap to explore →</span></div>
             </a>`).join("")}
-          ${trads.length ? `<p style="margin:10px 0 0"><b style="font-family:var(--display);color:var(--teal)">Living traditions:</b>
+          ${trads.length ? `<p style="margin:10px 0 0"><a href="traditions.html" style="font-family:var(--display);font-weight:700;color:var(--teal)">Living traditions:</a>
             ${trads.map(t => `${t.icon} ${esc(t.name)}`).join(" · ")}</p>` : ""}
         </div>`;
     }
 
+    // ---------------- Living traditions preview ----------------
+    const PREVIEW = [
+      ["🎨 Art Forms", ["madhubani", "warli", "pattachitra"]],
+      ["💃 Dance & Music", ["bharatanatyam", "bihu-dance", "garba"]],
+      ["🪔 Festivals", ["durga-puja", "pongal", "baisakhi"]]
+    ];
+    const hasPhoto = id => typeof TRADITION_CREDITS !== "undefined" && TRADITION_CREDITS[id];
+    document.getElementById("trad-preview").innerHTML = PREVIEW.map(([title, ids]) => `
+      <div class="panel" style="margin:0">
+        <h2>${title}</h2>
+        <div class="trad-three">${ids.map(id => TRADITIONS.find(t => t.id === id)).filter(Boolean).map(t => `
+          <a class="trad" href="traditions.html">
+            ${hasPhoto(t.id) ? `<img src="images/traditions/thumbs/${esc(t.id)}.jpg" alt="${esc(t.name)}" loading="lazy" width="480" height="360">`
+                             : `<div class="trad-icon" aria-hidden="true">${t.icon}</div>`}
+            <strong>${esc(t.name.replace(/ (painting|dance)$/, ""))}</strong><span>${esc(t.state)}</span>
+          </a>`).join("")}
+        </div>
+      </div>`).join("");
+
+    // traditions.html links here as index.html?state=Kerala#map
+    const wanted = new URLSearchParams(location.search).get("state");
+    if (wanted && states.has(wanted)) select([wanted], wanted);
     if (location.hash === "#map") document.getElementById("map").scrollIntoView();
   </script>
 </body>
