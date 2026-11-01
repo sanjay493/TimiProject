@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Explore &amp; Play · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap">
+    <h1 class="plaque">Explore &amp; Play</h1>
+    <p class="plaque-sub">Test what you've learned about India's heritage!</p>
+
+    <div class="games">
+      <a class="game-card" href="guess.html">
+        <span class="big" aria-hidden="true">🖼️</span>
+        <strong>Guess the Monument</strong>
+        <span>See the photo, pick the right name</span>
+      </a>
+      <a class="game-card" href="match.html">
+        <span class="big" aria-hidden="true">💃</span>
+        <strong>Match the Tradition</strong>
+        <span>Pair dances, arts &amp; festivals with their states</span>
+      </a>
+      <a class="game-card" href="spin.html">
+        <span class="big" aria-hidden="true">🎡</span>
+        <strong>Spin &amp; Answer</strong>
+        <span>Spin the wheel, answer the question</span>
+      </a>
+      <a class="game-card" href="passport.html">
+        <span class="big" aria-hidden="true">📕</span>
+        <strong>Heritage Passport</strong>
+        <span id="pp">Collect a stamp for every monument</span>
+      </a>
+    </div>
+
+    <div class="prize-note">
+      🎁 <strong>Prizes for Winners!</strong><br>
+      <span id="rule"></span>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">A 9th-grade school project · India, A Living Museum</div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("play");
+    document.getElementById("pp").textContent = `You have ${Passport.count()} of ${MONUMENTS.length} stamps`;
+    document.getElementById("rule").textContent =
+      `Scan the QR codes at our stall to collect ${prizeGoal()} passport stamps, or score 8 or more in Guess the Monument — then show your screen to claim a prize.`;
+  </script>
+</body>
+</html>

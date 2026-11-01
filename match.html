@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Match the Tradition · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap game">
+    <h1 class="plaque">💃 Match the Tradition</h1>
+    <p class="plaque-sub">Tap a tradition, then tap the state it comes from.</p>
+    <div id="game" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <div class="wrap"><a href="play.html">← More games</a></div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/traditions.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("play");
+    const ROUNDS = 3, PAIRS = 4;
+    const box = document.getElementById("game");
+    let round, mistakes, matched, picked;
+
+    // 4 traditions, each from a different state
+    function pickPairs() {
+      const chosen = [];
+      for (const t of shuffle(TRADITIONS)) {
+        if (!chosen.some(c => c.state === t.state)) chosen.push(t);
+        if (chosen.length === PAIRS) break;
+      }
+      return chosen;
+    }
+
+    function start() { round = 0; mistakes = 0; play(); }
+
+    function play() {
+      const pairs = pickPairs();
+      matched = 0; picked = null;
+      box.innerHTML = `
+        <div class="scorebar"><span>Round ${round + 1} of ${ROUNDS}</span><span>❌ Mistakes: <b id="mis">${mistakes}</b></span></div>
+        <div class="progress"><i style="width:${(round / ROUNDS) * 100}%"></i></div>
+        <div class="match">
+          <div class="col">${shuffle(pairs).map(t => `
+            <button class="tile" data-side="trad" data-state="${esc(t.state)}"><small>${t.icon} ${esc(t.kind)}</small>${esc(t.name)}</button>`).join("")}
+          </div>
+          <div class="col">${shuffle(pairs).map(t => `
+            <button class="tile state" data-side="state" data-state="${esc(t.state)}">${esc(t.state)}</button>`).join("")}
+          </div>
+        </div>
+        <div id="after" style="margin-top:16px"></div>`;
+      box.querySelectorAll(".tile").forEach(b => b.addEventListener("click", () => tap(b)));
+    }
+
+    function tap(b) {
+      if (b.classList.contains("done")) return;
+      if (!picked || picked.dataset.side === b.dataset.side) {
+        // first pick (or change of mind on the same side)
+        if (picked) picked.classList.remove("picked");
+        picked = b; b.classList.add("picked");
+        return;
+      }
+      const a = picked;
+      a.classList.remove("picked");
+      picked = null;
+      if (a.dataset.state === b.dataset.state) {
+        a.classList.add("done"); b.classList.add("done");
+        matched++;
+        if (matched === PAIRS) roundDone();
+      } else {
+        mistakes++;
+        document.getElementById("mis").textContent = mistakes;
+        [a, b].forEach(x => { x.classList.remove("shake"); void x.offsetWidth; x.classList.add("shake"); });
+      }
+    }
+
+    function roundDone() {
+      const last = round + 1 === ROUNDS;
+      document.getElementById("after").innerHTML =
+        `<div class="center"><button class="btn" id="next">${last ? "See my result" : "Next round →"}</button></div>`;
+      document.getElementById("next").addEventListener("click", () => { round++; last ? finish() : play(); });
+    }
+
+    function finish() {
+      const stars = mistakes === 0 ? 3 : mistakes <= 3 ? 2 : mistakes <= 6 ? 1 : 0;
+      box.innerHTML = `
+        <div class="panel result" style="margin-top:16px">
+          <div class="stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+          <div class="score" style="color:var(--maroon)">${ROUNDS * PAIRS} matched</div>
+          <p>${mistakes === 0 ? "Perfect — not a single mistake!" : `You made ${mistakes} mistake${mistakes === 1 ? "" : "s"}.`}
+             India has so many living traditions — every state has its own dances, arts and festivals.</p>
+        </div>
+        <div class="center" style="margin-top:16px">
+          <button class="btn" id="again">Play again</button>
+          <a class="btn secondary" href="play.html">More games</a>
+        </div>`;
+      document.getElementById("again").addEventListener("click", start);
+    }
+
+    start();
+  </script>
+</body>
+</html>

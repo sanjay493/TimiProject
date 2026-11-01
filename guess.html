@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Monument · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap game">
+    <h1 class="plaque">🖼️ Guess the Monument</h1>
+    <div id="game" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <div class="wrap"><a href="play.html">← More games</a></div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/image-credits.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("play");
+    const ROUNDS = 10, WIN = 8;
+    const box = document.getElementById("game");
+    let questions, round, score;
+
+    function start() {
+      questions = sample(MONUMENTS, ROUNDS);
+      round = 0; score = 0;
+      ask();
+    }
+
+    function ask() {
+      const m = questions[round];
+      // 3 wrong answers, from other states so it is fair
+      const wrong = sample(MONUMENTS.filter(x => x.state !== m.state), 3);
+      const options = shuffle([m, ...wrong]);
+      const next = questions[round + 1];
+      if (next) new Image().src = photoOf(next.id);   // load the next photo early
+
+      box.innerHTML = `
+        <div class="scorebar"><span>Question ${round + 1} of ${ROUNDS}</span><span>⭐ ${score}</span></div>
+        <div class="progress"><i style="width:${(round / ROUNDS) * 100}%"></i></div>
+        <div class="quiz-photo"><img src="${photoOf(esc(m.id))}" alt="Which monument is this?" width="960" height="720"></div>
+        <p class="question">Which monument is this?</p>
+        <div class="options">${options.map(o => `<button class="opt" data-id="${esc(o.id)}">${esc(o.name)}</button>`).join("")}</div>
+        <div class="feedback" id="fb"></div>`;
+
+      box.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => answer(b, m)));
+    }
+
+    function answer(button, m) {
+      const right = button.dataset.id === m.id;
+      if (right) score++;
+      box.querySelectorAll(".opt").forEach(b => {
+        b.disabled = true;
+        if (b.dataset.id === m.id) b.classList.add("correct");
+      });
+      if (!right) button.classList.add("wrong");
+      const fact = m.facts[Math.floor(Math.random() * m.facts.length)];
+      document.getElementById("fb").innerHTML = `
+        <div class="panel">
+          <h2>${right ? "✅ Correct!" : "❌ Not quite!"}</h2>
+          <p style="margin:0 0 6px">This is <b>${esc(m.name)}</b> in <b>${esc(m.state)}</b>.</p>
+          <p style="margin:0">💡 ${esc(fact)}</p>
+        </div>
+        <div class="center"><button class="btn" id="next">${round + 1 < ROUNDS ? "Next question →" : "See my score"}</button></div>`;
+      document.getElementById("next").addEventListener("click", () => {
+        round++;
+        round < ROUNDS ? ask() : finish();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function finish() {
+      const best = Math.max(score, store.get("ilm-guess-best", 0));
+      store.set("ilm-guess-best", best);
+      const stars = score >= 9 ? 3 : score >= 6 ? 2 : score >= 3 ? 1 : 0;
+      box.innerHTML = `
+        <div class="panel result" style="margin-top:16px">
+          <div class="stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+          <div class="score" style="color:var(--maroon)">${score} / ${ROUNDS}</div>
+          <p>${score >= WIN ? "Amazing — you really know India's monuments!" : score >= 5 ? "Well done! Explore more monuments and try again." : "Good try! Read about the monuments and play again."}</p>
+          <p style="margin:0;color:var(--ink-soft)">Your best score: ${best} / ${ROUNDS}</p>
+        </div>
+        ${score >= WIN ? `<div class="prize"><strong>🎁 You're a winner!</strong>Show this screen at our stall to claim your prize.</div>` : ""}
+        <div class="center" style="margin-top:16px">
+          <button class="btn" id="again">Play again</button>
+          <a class="btn secondary" href="play.html">More games</a>
+        </div>`;
+      document.getElementById("again").addEventListener("click", start);
+    }
+
+    start();
+  </script>
+</body>
+</html>

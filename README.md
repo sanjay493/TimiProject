@@ -9,11 +9,19 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 
 | File / folder | What it is |
 |---|---|
-| `index.html` | Home page: all monuments, with search and filters (States / UTs / UNESCO) |
-| `monument.html` | One page that shows any monument, e.g. `monument.html?id=taj-mahal` |
+| `index.html` | Home page: tappable map of India, plus all monuments with search and filters |
+| `monument.html` | One page that shows any monument, e.g. `monument.html?id=taj-mahal`. Opening it adds a passport stamp |
+| `play.html` | **Explore & Play**: links to the games |
+| `guess.html` | Guess the Monument: photo quiz, 10 questions |
+| `match.html` | Match the Tradition: pair dances, arts and festivals with their states |
+| `spin.html` | Spin & Answer: spin the wheel, answer a quiz question |
+| `passport.html` | Heritage Passport: the stamps a visitor has collected, and a prize message |
 | `qr-sheet.html` | Printable QR codes: small cut-outs, or one large sign per page |
 | `js/data.js` | **All the monument content.** Edit this to change facts or add monuments |
-| `js/config.js` | The site's web address (used for the QR codes) |
+| `js/traditions.js` | Dances, art forms and festivals used by the games and the map |
+| `js/india-map.js` | State outlines for the map (from [@svg-maps/india](https://github.com/VictorCazanave/svg-maps), CC BY 4.0) |
+| `js/common.js` | Shared code: navigation bar, passport stamps, helpers |
+| `js/config.js` | The site's web address (used for the QR codes) and `PRIZE_STAMPS`, the number of stamps that wins a prize |
 | `js/image-credits.js` | Photo credits (made automatically, don't edit by hand) |
 | `css/style.css` | Colours and layout (also has a dark mode) |
 | `images/` | Monument photos (`images/thumbs/` has small copies for the home page) |
@@ -40,6 +48,16 @@ Every time you push changes to `main`, the website updates by itself within a mi
 3. Click **Print**.
 
 Test one code with your phone before printing them all!
+
+## Games and prizes
+
+- **Heritage Passport:** every monument page a visitor opens (for example by scanning its QR code) adds a stamp, which is saved on their phone. When they reach `PRIZE_STAMPS` stamps (5 by default, set in `js/config.js`), the passport shows a "You've won a prize" message to show at the stall.
+- **Guess the Monument:** a score of 8 or more out of 10 also shows a prize message.
+- The QR sheet has a **"Scan to play"** code that opens the games page.
+
+## About the map
+
+The state outlines come from a map made before 2019. In it, Jammu & Kashmir and Ladakh are one shape, labelled "J&K + Ladakh". Tapping it shows the monuments of both. India's outer borders are drawn as officially shown by India.
 
 ## Edit or add a monument
 

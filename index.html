@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>India · A Living Museum</title>
-  <meta name="description" content="India – A Living Museum: famous monuments from every state and union territory, with photos and facts. A 9th-grade school project.">
+  <meta name="description" content="India – A Living Museum: famous monuments from every state and union territory, with photos, facts, a map and games. A 9th-grade school project.">
   <meta name="theme-color" content="#13203f">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +14,7 @@
 <body>
   <div class="lights" aria-hidden="true"></div>
   <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
 
   <header class="hero">
     <div class="wrap">
@@ -25,6 +26,31 @@
     <div class="skyline" aria-hidden="true"></div>
   </header>
   <div class="band" aria-hidden="true"></div>
+
+  <!-- ===== Map ===== -->
+  <section class="wrap" id="map">
+    <h2 class="plaque">Explore by Map</h2>
+    <p class="plaque-sub">Tap a state to see its monuments and traditions</p>
+    <div class="map-box">
+      <svg id="india" role="group" aria-label="Map of India — tap a state"></svg>
+      <svg class="compass" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#e0b04b" stroke-width="2"/>
+        <path d="M50 8 58 50 50 92 42 50Z" fill="#e8772e"/><path d="M8 50 50 42 92 50 50 58Z" fill="#e0b04b"/>
+        <path d="M50 8 58 50H42Z" fill="#8e1b2b"/>
+        <g font-family="Cinzel, serif" font-weight="700" font-size="12" fill="#f8dc8e" text-anchor="middle">
+          <text x="50" y="7">N</text><text x="50" y="100">S</text><text x="96" y="54">E</text><text x="4" y="54">W</text>
+        </g>
+      </svg>
+    </div>
+    <select class="map-pick" id="pick" aria-label="Choose a state or union territory">
+      <option value="">…or choose a state / union territory</option>
+    </select>
+    <div class="map-info" id="info" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== Monument list ===== -->
+  <h2 class="plaque" id="monuments">Our Heritage, Our Identity</h2>
+  <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
 
   <div class="tools">
     <div class="wrap">
@@ -38,21 +64,29 @@
     </div>
   </div>
 
-  <main class="wrap">
-    <h2 class="plaque">Our Heritage, Our Identity</h2>
-    <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
-    <div id="list"></div>
-  </main>
+  <main class="wrap" id="list"></main>
+
+  <div class="wrap center" style="margin-top:26px">
+    <a class="btn" href="play.html">🎮 Explore &amp; Play</a>
+  </div>
 
   <footer>
-    <div class="wrap">A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)</div>
+    <div class="wrap">
+      A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)<br>
+      Map outlines: <a href="https://github.com/VictorCazanave/svg-maps">@svg-maps/india</a>, CC BY 4.0
+    </div>
     <div class="skyline" aria-hidden="true"></div>
     <div class="band" aria-hidden="true"></div>
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/traditions.js"></script>
+  <script src="js/india-map.js"></script>
+  <script src="js/common.js"></script>
   <script>
-    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    renderNav("home");
+
+    // ---------------- Monument list ----------------
     const list = document.getElementById("list");
     const search = document.getElementById("search");
     let filter = "all";
@@ -72,7 +106,7 @@
 
       list.innerHTML = shown.length ? `<div class="grid">${shown.map(m => `
         <a class="card" href="monument.html?id=${encodeURIComponent(m.id)}">
-          <img src="images/thumbs/${esc(m.id)}.jpg" alt="${esc(m.name)}" loading="lazy" width="480" height="360">
+          <img src="${thumbOf(esc(m.id))}" alt="${esc(m.name)}" loading="lazy" width="480" height="360">
           <div><strong>${esc(m.name)}</strong><span>${esc(m.state)}</span>${m.region === "Union Territory" ? '<span class="ut">UT</span>' : ""}</div>
         </a>`).join("")}</div>`
         : `<p class="empty">No monuments match “${esc(search.value)}”.</p>`;
@@ -85,6 +119,78 @@
       render();
     }));
     render();
+
+    // ---------------- Map ----------------
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.getElementById("india");
+    const info = document.getElementById("info");
+    const pick = document.getElementById("pick");
+    const PALETTE = ["#f9a8d4", "#fdba74", "#fde047", "#86efac", "#93c5fd", "#c4b5fd", "#5eead4", "#fca5a5", "#bef264"];
+    svg.setAttribute("viewBox", INDIA_MAP.viewBox);
+
+    const shapes = INDIA_MAP.regions.map(r => {
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("d", r.path);
+      p.setAttribute("tabindex", "0");
+      p.setAttribute("role", "button");
+      p.setAttribute("aria-label", r.name);
+      const t = document.createElementNS(NS, "title");
+      t.textContent = r.name;
+      p.append(t);
+      p.addEventListener("click", () => select(r.states, r.name));
+      p.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(r.states, r.name); } });
+      svg.append(p);
+      return { r, p, box: p.getBBox() };
+    });
+
+    // colour neighbours differently (boxes that touch count as neighbours)
+    const touch = (a, b) => a.x <= b.x + b.width + 2 && b.x <= a.x + a.width + 2 && a.y <= b.y + b.height + 2 && b.y <= a.y + a.height + 2;
+    shapes.forEach((s, i) => {
+      const used = new Set(shapes.slice(0, i).filter(o => touch(s.box, o.box)).map(o => o.colour));
+      s.colour = PALETTE.find(c => !used.has(c)) || PALETTE[i % PALETTE.length];
+      s.p.setAttribute("fill", s.colour);
+    });
+
+    // names on the bigger states (not on UTs made of scattered pieces — their centre falls elsewhere)
+    const SCATTERED = ["Puducherry", "Andaman and Nicobar Islands", "Lakshadweep", "Dadra and Nagar Haveli", "Daman and Diu"];
+    shapes.filter(s => s.box.width * s.box.height > 1900 && s.box.width > 38 && !SCATTERED.includes(s.r.name)).forEach(s => {
+      const text = document.createElementNS(NS, "text");
+      const words = s.r.name.split(" ");
+      const lines = words.length > 1 && s.r.name.length > 10 ? [words.slice(0, Math.ceil(words.length / 2)).join(" "), words.slice(Math.ceil(words.length / 2)).join(" ")] : [s.r.name];
+      const cx = s.box.x + s.box.width / 2, cy = s.box.y + s.box.height / 2;
+      lines.forEach((line, k) => {
+        const ts = document.createElementNS(NS, "tspan");
+        ts.setAttribute("x", cx);
+        ts.setAttribute("y", cy + (k - (lines.length - 1) / 2) * 10);
+        ts.textContent = line;
+        text.append(ts);
+      });
+      svg.append(text);
+    });
+
+    // dropdown with every state / UT
+    [...states].sort().forEach(s => pick.add(new Option(s, s)));
+    pick.addEventListener("change", () => pick.value && select([pick.value], pick.value, true));
+
+    function select(stateList, label, fromPicker) {
+      shapes.forEach(s => s.p.classList.toggle("sel", s.r.states.some(x => stateList.includes(x))));
+      if (!fromPicker) pick.value = stateList.length === 1 ? stateList[0] : "";
+      const mons = MONUMENTS.filter(m => stateList.includes(m.state));
+      const trads = TRADITIONS.filter(t => stateList.includes(t.state));
+      info.innerHTML = `
+        <div class="panel">
+          <h2>${esc(label)}</h2>
+          ${mons.map(m => `
+            <a class="mini" href="monument.html?id=${encodeURIComponent(m.id)}">
+              <img src="${thumbOf(esc(m.id))}" alt="" width="84" height="63">
+              <div><strong>${esc(m.name)}</strong><span>${esc(m.state)} · tap to explore →</span></div>
+            </a>`).join("")}
+          ${trads.length ? `<p style="margin:10px 0 0"><b style="font-family:var(--display);color:var(--teal)">Living traditions:</b>
+            ${trads.map(t => `${t.icon} ${esc(t.name)}`).join(" · ")}</p>` : ""}
+        </div>`;
+    }
+
+    if (location.hash === "#map") document.getElementById("map").scrollIntoView();
   </script>
 </body>
 </html>

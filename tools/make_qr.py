@@ -39,10 +39,11 @@ def main():
     base = site_url()
     QR_DIR.mkdir(exist_ok=True)
     make(base, QR_DIR / "home.png")
+    make(f"{base}play.html", QR_DIR / "play.png")
     ids = monument_ids()
     for mid in ids:
         make(f"{base}monument.html?id={mid}", QR_DIR / f"{mid}.png")
-    print(f"Made {len(ids) + 1} QR codes for {base}")
+    print(f"Made {len(ids) + 2} QR codes for {base}")
 
 
 if __name__ == "__main__":

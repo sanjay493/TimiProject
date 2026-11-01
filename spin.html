@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spin &amp; Answer · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap game">
+    <h1 class="plaque">🎡 Spin &amp; Answer</h1>
+    <div class="scorebar"><span id="turn"></span><span>⭐ <b id="score">0</b></span></div>
+    <div class="wheel-box">
+      <div class="wheel-pointer" aria-hidden="true"></div>
+      <div class="wheel" id="wheel" aria-hidden="true"></div>
+      <div class="wheel-hub" aria-hidden="true"></div>
+    </div>
+    <p class="category" id="cat" aria-live="polite"></p>
+    <div class="center"><button class="btn" id="spin">Spin the wheel!</button></div>
+    <div id="q" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <div class="wrap"><a href="play.html">← More games</a></div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/traditions.js"></script>
+  <script src="js/image-credits.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("play");
+    const TURNS = 8;
+    const allStates = [...new Set(MONUMENTS.map(m => m.state))];
+    const letters = s => s.toLowerCase().replace(/[^a-z]/g, "");
+
+    // Four choices: the right one plus three different wrong ones
+    // (wrong ones must not overlap the right one, e.g. "Shah Jahan" vs "Shah Jahan, in memory of…")
+    const overlaps = (a, b) => letters(a).includes(letters(b)) || letters(b).includes(letters(a));
+    const choices = (right, pool) => shuffle([right, ...sample([...new Set(pool)].filter(x => !overlaps(x, right)), 3)]);
+
+    // Each wheel slice makes one kind of question
+    const SLICES = [
+      { label: "Which State?", colour: "#f9a8d4", make() {
+          const m = sample(MONUMENTS, 1)[0];
+          return { text: `In which state or UT is ${m.name}?`, answer: m.state, options: choices(m.state, allStates), more: `${m.name} is in ${m.location}.` };
+        } },
+      { label: "Who Built It?", colour: "#fdba74", make() {
+          const m = sample(MONUMENTS, 1)[0];
+          return { text: `Who built ${m.name}?`, answer: m.builtBy, options: choices(m.builtBy, MONUMENTS.map(x => x.builtBy)), more: `It dates from: ${m.period}.` };
+        } },
+      { label: "UNESCO", colour: "#fde047", make() {
+          const yes = sample(MONUMENTS.filter(m => m.unesco.startsWith("Yes")), 1)[0];
+          const no = sample(MONUMENTS.filter(m => m.unesco === "No"), 3);
+          return { text: "Which of these is a UNESCO World Heritage Site?", answer: yes.name, options: shuffle([yes, ...no].map(m => m.name)), more: `${yes.name}: ${yes.unesco}.` };
+        } },
+      { label: "Traditions", colour: "#86efac", make() {
+          const t = sample(TRADITIONS, 1)[0];
+          return { text: `${t.icon} ${t.name} (${t.kind.toLowerCase()}) is from which state?`, answer: t.state, options: choices(t.state, TRADITIONS.map(x => x.state)), more: `${t.name} comes from ${t.state}.` };
+        } },
+      { label: "Picture", colour: "#93c5fd", make() {
+          const m = sample(MONUMENTS, 1)[0];
+          return { text: "Which monument is in this picture?", photo: photoOf(m.id), answer: m.name,
+                   options: choices(m.name, MONUMENTS.filter(x => x.state !== m.state).map(x => x.name)), more: `${m.name} is in ${m.state}.` };
+        } },
+      { label: "Fun Fact", colour: "#c4b5fd", make() {
+          // a fact that doesn't give away the monument's name
+          for (;;) {
+            const m = sample(MONUMENTS, 1)[0];
+            const keys = [letters(m.name), ...m.name.split(/[\s,()]+/).filter(w => w.length > 4).map(letters)];
+            const facts = m.facts.filter(f => !keys.some(k => k && letters(f).includes(k)));
+            if (!facts.length) continue;
+            const f = sample(facts, 1)[0];
+            return { text: `“${f}” — Which monument is this about?`, answer: m.name,
+                     options: choices(m.name, MONUMENTS.map(x => x.name)), more: `That's a fact about ${m.name}, ${m.state}.` };
+          }
+        } }
+    ];
+
+    // Draw the wheel
+    const wheel = document.getElementById("wheel");
+    const step = 360 / SLICES.length;
+    wheel.style.background = `conic-gradient(${SLICES.map((s, i) => `${s.colour} ${i * step}deg ${(i + 1) * step}deg`).join(",")})`;
+    wheel.innerHTML = SLICES.map((s, i) => `<span style="transform:rotate(${i * step + step / 2 - 90}deg)">${s.label}</span>`).join("");
+
+    const spinBtn = document.getElementById("spin");
+    const qBox = document.getElementById("q");
+    const cat = document.getElementById("cat");
+    let turn, score, angle = 0;
+
+    function start() {
+      turn = 0; score = 0;
+      document.getElementById("score").textContent = 0;
+      showTurn();
+      qBox.innerHTML = ""; cat.textContent = "";
+      spinBtn.hidden = false; spinBtn.disabled = false;
+    }
+    const showTurn = () => document.getElementById("turn").textContent = `Spin ${Math.min(turn + 1, TURNS)} of ${TURNS}`;
+
+    spinBtn.addEventListener("click", () => {
+      spinBtn.disabled = true; qBox.innerHTML = ""; cat.textContent = "Spinning…";
+      const k = Math.floor(Math.random() * SLICES.length);
+      const centre = k * step + step / 2 + (Math.random() - .5) * step * .6;
+      // turn at least 5 full times, then stop with slice k under the pointer
+      angle += 1800 + ((360 - centre - (angle % 360)) % 360 + 360) % 360;
+      wheel.style.transform = `rotate(${angle}deg)`;
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setTimeout(() => ask(SLICES[k]), reduce ? 50 : 3100);
+    });
+
+    function ask(slice) {
+      const q = slice.make();
+      cat.textContent = `🎯 ${slice.label}`;
+      qBox.innerHTML = `
+        ${q.photo ? `<div class="quiz-photo" style="margin-top:12px"><img src="${esc(q.photo)}" alt="Mystery monument" width="960" height="720"></div>` : ""}
+        <p class="question">${esc(q.text)}</p>
+        <div class="options">${q.options.map(o => `<button class="opt">${esc(o)}</button>`).join("")}</div>
+        <div class="feedback" id="fb"></div>`;
+      qBox.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+        const right = b.textContent === q.answer;
+        if (right) document.getElementById("score").textContent = ++score;
+        qBox.querySelectorAll(".opt").forEach(x => { x.disabled = true; if (x.textContent === q.answer) x.classList.add("correct"); });
+        if (!right) b.classList.add("wrong");
+        turn++;
+        const last = turn >= TURNS;
+        document.getElementById("fb").innerHTML = `
+          <div class="panel"><h2>${right ? "✅ Correct!" : "❌ Not quite!"}</h2><p style="margin:0">💡 ${esc(q.more)}</p></div>
+          <div class="center"><button class="btn" id="go">${last ? "See my score" : "Spin again ↻"}</button></div>`;
+        document.getElementById("go").addEventListener("click", () => {
+          if (last) return finish();
+          showTurn(); qBox.innerHTML = ""; cat.textContent = ""; spinBtn.disabled = false;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }));
+    }
+
+    function finish() {
+      spinBtn.hidden = true; cat.textContent = "";
+      const stars = score >= 7 ? 3 : score >= 5 ? 2 : score >= 3 ? 1 : 0;
+      qBox.innerHTML = `
+        <div class="panel result" style="margin-top:16px">
+          <div class="stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+          <div class="score" style="color:var(--maroon)">${score} / ${TURNS}</div>
+          <p>${score >= 7 ? "Heritage champion!" : score >= 4 ? "Great spinning! Keep exploring." : "Good try — explore the monuments and spin again!"}</p>
+        </div>
+        <div class="center" style="margin-top:16px">
+          <button class="btn" id="again">Play again</button>
+          <a class="btn secondary" href="play.html">More games</a>
+        </div>`;
+      document.getElementById("again").addEventListener("click", start);
+    }
+
+    start();
+  </script>
+</body>
+</html>

@@ -227,7 +227,166 @@ footer .band { margin-top: 0; }
 .pager a small { display: block; font: 600 .7rem var(--body); color: var(--ink-soft); }
 .pager a.next { text-align: right; }
 
+/* ---------- Navigation ---------- */
+.mainnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; padding: 12px 10px 0; }
+.mainnav a {
+  display: inline-flex; align-items: center; gap: 4px; text-decoration: none;
+  padding: 6px 10px; border-radius: 999px; border: 1.5px solid var(--gold);
+  font: 700 .72rem var(--display); color: var(--gold-light);
+}
+.mainnav a[aria-current="page"] { background: var(--gold); color: var(--navy); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block; cursor: pointer; text-decoration: none; text-align: center;
+  padding: 11px 22px; border-radius: 999px; border: 0;
+  background: linear-gradient(var(--gold-light), var(--gold)); color: var(--navy);
+  font: 700 1rem var(--display); box-shadow: 0 4px 12px rgba(0, 0, 0, .35);
+}
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.secondary { background: transparent; color: var(--gold-light); border: 1.5px solid var(--gold); box-shadow: none; }
+.center { text-align: center; }
+
+/* ---------- Map of India ---------- */
+.map-box { position: relative; max-width: 560px; margin: 16px auto 0; }
+.map-box svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .45)); }
+.map-box path { stroke: var(--navy); stroke-width: .9; cursor: pointer; transition: filter .15s; }
+.map-box path:hover { filter: brightness(1.12); }
+.map-box path.sel { stroke: #fff; stroke-width: 2.4; filter: brightness(1.15) drop-shadow(0 0 6px #fff6c9); }
+.map-box path:focus { outline: none; stroke: #fff; stroke-width: 2.4; }
+.map-box text {
+  font: 700 9px var(--display); fill: #2b1a0c; text-anchor: middle; pointer-events: none;
+  paint-order: stroke; stroke: rgba(255, 255, 255, .7); stroke-width: 2.2px;
+}
+.compass { position: absolute; left: 2%; bottom: 27%; width: 15%; max-width: 70px; opacity: .9; pointer-events: none; }
+.map-pick { display: block; width: 100%; max-width: 560px; margin: 12px auto 0; padding: 10px 14px; border-radius: 999px; border: 2px solid var(--gold); background: var(--parchment); color: var(--ink); font: 1rem var(--body); }
+.map-info { max-width: 560px; margin: 14px auto 0; }
+.map-info .panel { margin: 0; }
+.mini { display: flex; gap: 10px; align-items: center; text-decoration: none; color: var(--ink); padding: 8px 0; border-top: 1px dashed rgba(142, 27, 43, .25); }
+.mini:first-of-type { border-top: 0; }
+.mini img { width: 84px; height: 63px; object-fit: cover; border-radius: 8px; border: 2px solid var(--gold); flex: none; }
+.mini strong { display: block; font: 700 1rem var(--display); color: var(--maroon); }
+.mini span { font-size: .85rem; color: var(--ink-soft); }
+
+/* ---------- Explore & Play hub ---------- */
+.games { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); margin-top: 18px; }
+.game-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
+  text-decoration: none; color: var(--ink); padding: 18px 12px;
+  background: linear-gradient(var(--parchment), var(--parchment-2));
+  border: 2px solid var(--gold); border-radius: var(--radius);
+  box-shadow: inset 0 0 0 4px var(--parchment), inset 0 0 0 5px rgba(224, 176, 75, .7), 0 6px 16px rgba(0, 0, 0, .35);
+}
+.game-card .big { font-size: 2.6rem; line-height: 1; }
+.game-card strong { font: 700 1.05rem/1.2 var(--display); color: var(--maroon); }
+.game-card span { font-size: .85rem; color: var(--ink-soft); }
+.prize-note {
+  margin: 22px auto 0; max-width: 560px; text-align: center; padding: 14px 16px;
+  border: 2px dashed var(--gold); border-radius: var(--radius); color: var(--parchment);
+}
+.prize-note strong { color: var(--gold-light); font-family: var(--display); }
+
+/* ---------- Quiz pieces (shared by games) ---------- */
+.game { max-width: 620px; margin: 0 auto; }
+.scorebar { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 10px; font: 700 .9rem var(--display); color: var(--gold-light); }
+.progress { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .15); overflow: hidden; margin-bottom: 14px; }
+.progress i { display: block; height: 100%; background: linear-gradient(90deg, var(--saffron), var(--gold-light)); transition: width .3s; }
+.quiz-photo { padding: 5px; background: linear-gradient(135deg, var(--gold-light), var(--gold) 50%, #a8741d); border-radius: 14px; }
+.quiz-photo img { width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: cover; border-radius: 9px; }
+.question { font: 700 1.2rem/1.35 var(--display); color: var(--gold-light); text-align: center; margin: 16px 0 12px; }
+.options { display: grid; gap: 10px; }
+@media (min-width: 560px) { .options { grid-template-columns: 1fr 1fr; } }
+.opt {
+  cursor: pointer; text-align: left; padding: 12px 14px; border-radius: 12px;
+  border: 2px solid var(--gold); background: linear-gradient(var(--parchment), var(--parchment-2));
+  color: var(--ink); font: 600 1rem/1.3 var(--body);
+}
+.opt.correct { background: #d6f5d6; border-color: var(--green); color: #14421a; }
+.opt.wrong { background: #fbd5d5; border-color: #b42318; color: #6b1010; }
+.opt:disabled { cursor: default; }
+.feedback { margin-top: 14px; }
+.feedback .panel { margin-bottom: 12px; }
+.result { text-align: center; }
+.result .stars { font-size: 2.4rem; letter-spacing: .1em; }
+.result .score { font: 700 2.4rem var(--fancy); color: var(--gold-light); margin: 6px 0; }
+
+/* ---------- Match the Tradition ---------- */
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.match .col { display: grid; gap: 10px; align-content: start; }
+.tile {
+  cursor: pointer; padding: 10px; border-radius: 12px; min-height: 64px; text-align: center;
+  border: 2px solid var(--gold); background: linear-gradient(var(--parchment), var(--parchment-2));
+  color: var(--ink); font: 600 .92rem/1.25 var(--body);
+}
+.tile small { display: block; font: 700 .65rem var(--display); color: var(--teal); text-transform: uppercase; letter-spacing: .06em; }
+.tile.state { font-family: var(--display); font-weight: 700; color: var(--maroon); }
+.tile.picked { box-shadow: 0 0 0 3px #fff, 0 0 16px var(--gold-light); }
+.tile.done { background: #d6f5d6; border-color: var(--green); color: #14421a; cursor: default; }
+.tile.shake { animation: shake .35s; border-color: #b42318; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+/* ---------- Spin & Answer ---------- */
+.wheel-box { position: relative; width: min(300px, 80vw); margin: 18px auto 6px; }
+.wheel {
+  width: 100%; aspect-ratio: 1; border-radius: 50%; border: 6px solid var(--gold);
+  box-shadow: 0 0 0 4px var(--navy), 0 0 0 7px var(--gold-light), 0 10px 24px rgba(0, 0, 0, .45);
+  transition: transform 3s cubic-bezier(.17, .67, .2, 1); position: relative;
+}
+.wheel span {
+  position: absolute; left: 50%; top: 50%; width: 46%; transform-origin: 0 50%;
+  font: 700 .72rem var(--display); color: #2b1a0c; text-align: right; padding-right: 10px;
+}
+.wheel-pointer {
+  position: absolute; left: 50%; top: -14px; transform: translateX(-50%); z-index: 2;
+  width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent;
+  border-top: 26px solid var(--maroon); filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5));
+}
+.wheel-hub {
+  position: absolute; left: 50%; top: 50%; width: 18%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold));
+  border: 3px solid var(--navy);
+}
+.category { text-align: center; font: 700 1rem var(--display); color: var(--gold-light); min-height: 1.5em; }
+
+/* ---------- Heritage Passport ---------- */
+.passport-cover {
+  max-width: 560px; margin: 16px auto 0; padding: 20px 18px; text-align: center; border-radius: 14px;
+  background: linear-gradient(160deg, #6b1422, #3e0b14); border: 3px solid var(--gold);
+  box-shadow: inset 0 0 0 5px #4e0f19, inset 0 0 0 6px var(--gold), 0 10px 24px rgba(0, 0, 0, .45);
+}
+.passport-cover h2 { margin: 0; font: 700 1.5rem var(--fancy); color: var(--gold-light); }
+.passport-cover p { margin: 6px 0 0; color: var(--parchment-2); }
+.passport-cover .count { font: 700 2.6rem var(--fancy); color: var(--gold-light); margin-top: 6px; }
+.prize {
+  max-width: 560px; margin: 14px auto 0; padding: 14px; text-align: center; border-radius: 12px;
+  background: linear-gradient(var(--gold-light), var(--gold)); color: var(--navy); font-weight: 600;
+}
+.prize strong { display: block; font: 700 1.25rem var(--display); }
+.stamps { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); margin-top: 18px; }
+.stamp {
+  aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  padding: 10px; text-decoration: none; font: 700 .64rem/1.15 var(--display);
+  border: 2px dashed rgba(248, 220, 142, .35); color: rgba(248, 220, 142, .45);
+}
+.stamp.got {
+  border: 3px double var(--maroon); color: var(--maroon); background: var(--parchment);
+  transform: rotate(-8deg); box-shadow: 0 0 0 3px var(--parchment), 0 0 0 5px var(--maroon);
+}
+.stamp.got:nth-child(even) { transform: rotate(7deg); border-color: var(--teal); color: var(--teal); box-shadow: 0 0 0 3px var(--parchment), 0 0 0 5px var(--teal); }
+.stamp em { display: block; font: 600 .58rem var(--body); font-style: normal; opacity: .8; margin-top: 2px; }
+
+/* stamp notice on monument pages */
+.stamp-toast {
+  display: flex; gap: 10px; align-items: center; margin: 0 0 18px; padding: 10px 14px; border-radius: 12px;
+  background: linear-gradient(160deg, #6b1422, #3e0b14); border: 2px solid var(--gold); color: var(--parchment);
+  text-decoration: none; font-size: .92rem;
+}
+.stamp-toast b { color: var(--gold-light); font-family: var(--display); }
+.stamp-toast .ico { font-size: 1.6rem; }
+
 @media (prefers-reduced-motion: reduce) {
   .lights { animation: none; }
   .card { transition: none; }
+  .wheel { transition-duration: .01s; }
+  .tile.shake { animation: none; }
 }

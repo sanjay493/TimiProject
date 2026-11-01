@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heritage Passport · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="mainnav" id="nav" aria-label="Main"></nav>
+
+  <main class="wrap">
+    <div class="passport-cover">
+      <img class="lotus" src="images/lotus.svg" alt="" width="80" height="48">
+      <h2>Heritage Passport</h2>
+      <p>India · A Living Museum</p>
+      <div class="count" id="count"></div>
+      <p id="howto"></p>
+    </div>
+    <div id="prize"></div>
+
+    <h2 class="plaque">My Stamps</h2>
+    <p class="plaque-sub">Scan a QR code at the stall — or open any monument page — to collect its stamp.</p>
+    <div class="stamps" id="stamps"></div>
+
+    <div class="center" style="margin-top:26px">
+      <button class="btn secondary" id="reset">Start a new passport</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">Stamps are saved on this phone only.</div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    renderNav("passport");
+    const niceDate = iso => { const d = new Date(iso + "T00:00:00"); return isNaN(d) ? iso : d.toLocaleDateString("en-IN", { day: "numeric", month: "short" }); };
+
+    function render() {
+      const stamps = Passport.all();
+      const got = Passport.count(), goal = prizeGoal();
+      document.getElementById("count").textContent = `${got} / ${MONUMENTS.length}`;
+      document.getElementById("howto").textContent = got >= goal
+        ? "You've collected enough stamps for a prize!"
+        : `Collect ${goal - got} more stamp${goal - got === 1 ? "" : "s"} to win a prize.`;
+
+      document.getElementById("prize").innerHTML = got >= MONUMENTS.length
+        ? `<div class="prize"><strong>🏆 Grand Explorer!</strong>You visited every monument in India's living museum! Show this screen at our stall.</div>`
+        : got >= goal
+          ? `<div class="prize"><strong>🎁 You've won a prize!</strong>Show this screen at our stall to claim it.</div>`
+          : "";
+
+      document.getElementById("stamps").innerHTML = MONUMENTS.map(m => stamps[m.id]
+        ? `<a class="stamp got" href="monument.html?id=${encodeURIComponent(m.id)}">${esc(m.name)}<em>${esc(m.state)}<br>${esc(niceDate(stamps[m.id]))}</em></a>`
+        : `<a class="stamp" href="monument.html?id=${encodeURIComponent(m.id)}" title="Not visited yet">?<em>${esc(m.state)}</em></a>`
+      ).join("");
+    }
+
+    // Two taps to reset, so it isn't done by accident
+    const reset = document.getElementById("reset");
+    let armed = false;
+    reset.addEventListener("click", () => {
+      if (!armed) {
+        armed = true;
+        reset.textContent = "Tap again to erase all stamps";
+        setTimeout(() => { armed = false; reset.textContent = "Start a new passport"; }, 4000);
+        return;
+      }
+      Passport.reset();
+      armed = false;
+      reset.textContent = "Start a new passport";
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
