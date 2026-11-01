@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" preserveAspectRatio="xMidYMax meet">
+  <!-- Gold monument silhouettes: India Gate, Taj Mahal, Gopuram, Qutub Minar, Charminar -->
+  <g fill="#e0b04b">
+    <!-- India Gate -->
+    <path d="M18 120V52h64v68H63V80c0-8-6-14-13-14s-13 6-13 14v40z"/>
+    <rect x="13" y="42" width="74" height="10"/>
+    <rect x="30" y="34" width="40" height="8"/>
+    <path d="M40 34q10-12 20 0z"/>
+    <!-- Taj Mahal -->
+    <rect x="112" y="98" width="156" height="22"/>
+    <rect x="148" y="66" width="84" height="32"/>
+    <path d="M160 66c0-22 14-34 30-44 16 10 30 22 30 44z"/>
+    <rect x="189" y="10" width="2" height="14"/>
+    <path d="M150 66c0-8 5-12 9-14 4 2 9 6 9 14zM212 66c0-8 5-12 9-14 4 2 9 6 9 14z"/>
+    <rect x="120" y="50" width="7" height="48"/><path d="M118 50q5.5-10 11 0z"/>
+    <rect x="253" y="50" width="7" height="48"/><path d="M251 50q5.5-10 11 0z"/>
+    <!-- Gopuram (temple tower) -->
+    <path d="M300 120l8-24h64l8 24zM310 96l6-18h48l6 18zM318 78l5-16h34l5 16zM325 62l4-14h22l4 14z"/>
+    <path d="M328 48h24v-6c0-4-3-6-6-6h-12c-3 0-6 2-6 6z"/>
+    <path d="M326 42l-4-8 6 4zM354 42l4-8-6 4z"/>
+    <!-- Qutub Minar -->
+    <path d="M414 120l6-104h8l6 104z"/>
+    <rect x="412" y="88" width="24" height="3"/><rect x="414" y="62" width="20" height="3"/>
+    <rect x="416" y="38" width="16" height="3"/><path d="M420 16q4-8 8 0z"/>
+    <!-- Charminar -->
+    <path d="M470 120V70h76v50h-24V96c0-8-6-14-14-14s-14 6-14 14v24z"/>
+    <rect x="466" y="62" width="84" height="8"/>
+    <rect x="466" y="26" width="9" height="94"/><path d="M465 26q5.5-12 11 0z"/>
+    <rect x="541" y="26" width="9" height="94"/><path d="M540 26q5.5-12 11 0z"/>
+    <path d="M494 62c0-10 6-16 14-18 8 2 14 8 14 18z"/>
+  </g>
+</svg>

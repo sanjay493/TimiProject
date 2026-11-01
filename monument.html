@@ -3,19 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monument · Monuments of India</title>
-  <meta name="theme-color" content="#c2410c">
+  <title>Monument · India, A Living Museum</title>
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="flag-strip"></div>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
   <div class="wrap">
     <nav class="topbar">
       <a class="back" href="index.html">← All monuments</a>
+      <a class="brand" href="index.html">India<small>A Living Museum</small></a>
     </nav>
     <main id="page"></main>
   </div>
-  <footer class="wrap">A 9th-grade school project · Monuments of India</footer>
+  <footer>
+    <div class="wrap">A 9th-grade school project · India, A Living Museum</div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+  </footer>
 
   <script src="js/data.js"></script>
   <script src="js/image-credits.js"></script>
@@ -33,7 +42,7 @@
       const prev = MONUMENTS[(i - 1 + MONUMENTS.length) % MONUMENTS.length];
       const next = MONUMENTS[(i + 1) % MONUMENTS.length];
       const isUnesco = m.unesco.startsWith("Yes");
-      document.title = `${m.name} · Monuments of India`;
+      document.title = `${m.name} · India, A Living Museum`;
 
       const row = (label, value) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`;
 
@@ -52,7 +61,7 @@
         </p>
 
         <section class="panel">
-          <h2>📜 Fundamental Facts</h2>
+          <h2>🏛️ Fundamental Facts</h2>
           <dl class="facts-table">
             ${row("Location", m.location + ", " + m.state)}
             ${row("Built by", m.builtBy)}
@@ -63,7 +72,7 @@
         </section>
 
         <section class="panel">
-          <h2>✨ Interesting Facts</h2>
+          <h2>🪔 Interesting Facts</h2>
           <ol class="fun">${m.facts.map(f => `<li>${esc(f)}</li>`).join("")}</ol>
         </section>
 

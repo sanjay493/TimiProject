@@ -3,9 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QR Code Sheet · Monuments of India</title>
+  <title>QR Code Sheet · India, A Living Museum</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&display=swap">
   <style>
-    :root { --accent: #c2410c; }
+    :root { --accent: #8e1b2b; --gold: #d4a23c; --parchment: #fdf4e1; }
+    .tag { background: var(--parchment); }
+    .tag strong, .controls h1 { font-family: "Cinzel", Georgia, serif; color: #8e1b2b; }
+    .tag .scan { font-family: "Cinzel", Georgia, serif; color: #13837a; }
+    .brand { font-family: "Cinzel Decorative", "Cinzel", Georgia, serif; font-size: .8rem; color: #a8741d; margin-top: 4px; }
+    body.large .tag .brand { font-size: 1.3rem; }
     * { box-sizing: border-box; }
     body { margin: 0; padding: 16px; font: 15px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; color: #222; background: #fff; }
     .controls { max-width: 900px; margin: 0 auto 16px; padding: 12px 14px; background: #fdf1e7; border-radius: 10px; }
@@ -16,7 +22,8 @@
 
     .sheet { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); max-width: 900px; margin: 0 auto; }
     .tag {
-      border: 2px dashed #bbb; border-radius: 10px; padding: 10px; text-align: center;
+      border: 2px solid var(--gold); outline: 1px dashed #bbb; outline-offset: 4px;
+      border-radius: 10px; padding: 10px; text-align: center; margin: 5px;
       break-inside: avoid; page-break-inside: avoid;
     }
     .tag img { width: 100%; max-width: 200px; margin: 0 auto; display: block; image-rendering: pixelated; }
@@ -68,13 +75,14 @@
       `<div class="tag home">
          <div class="scan">Scan to explore</div>
          <img src="qr/home.png" alt="QR code for all monuments">
-         <strong>All Monuments of India</strong><span>${MONUMENTS.length} monuments · every state &amp; UT</span>
+         <strong>India · A Living Museum</strong><span>${MONUMENTS.length} monuments · every state &amp; UT</span>
        </div>` +
       MONUMENTS.map(m => `
        <div class="tag">
          <div class="scan">Scan to learn more</div>
          <img src="qr/${esc(m.id)}.png" alt="QR code for ${esc(m.name)}">
          <strong>${esc(m.name)}</strong><span>${esc(m.state)}</span>
+         <div class="brand">India · A Living Museum</div>
        </div>`).join("");
 
     const size = document.getElementById("size");

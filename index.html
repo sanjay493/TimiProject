@@ -3,18 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monuments of India</title>
-  <meta name="description" content="Famous monuments from every state and union territory of India, with photos and facts. A 9th-grade school project.">
-  <meta name="theme-color" content="#c2410c">
+  <title>India · A Living Museum</title>
+  <meta name="description" content="India – A Living Museum: famous monuments from every state and union territory, with photos and facts. A 9th-grade school project.">
+  <meta name="theme-color" content="#13203f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="flag-strip"></div>
+  <div class="lights" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
 
-  <header class="wrap hero">
-    <h1>Monuments of <span>India</span></h1>
-    <p id="intro">One famous monument from every state and union territory.</p>
+  <header class="hero">
+    <div class="wrap">
+      <img class="lotus" src="images/lotus.svg" alt="" width="80" height="48">
+      <h1><span class="india">India</span><span class="museum">A Living Museum</span></h1>
+      <div class="ribbon">Timeless Traditions • Vibrant Cultures •&nbsp;A&nbsp;Shared&nbsp;Tomorrow</div>
+      <p class="intro" id="intro">One famous monument from every state and union territory.</p>
+    </div>
+    <div class="skyline" aria-hidden="true"></div>
   </header>
+  <div class="band" aria-hidden="true"></div>
 
   <div class="tools">
     <div class="wrap">
@@ -28,10 +38,16 @@
     </div>
   </div>
 
-  <main class="wrap" id="list"></main>
+  <main class="wrap">
+    <h2 class="plaque">Our Heritage, Our Identity</h2>
+    <p class="plaque-sub">Architectural Heritage · tap a monument to explore</p>
+    <div id="list"></div>
+  </main>
 
-  <footer class="wrap">
-    A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)
+  <footer>
+    <div class="wrap">A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)</div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
   </footer>
 
   <script src="js/data.js"></script>
@@ -43,7 +59,7 @@
 
     const states = new Set(MONUMENTS.map(m => m.state));
     document.getElementById("intro").textContent =
-      `${MONUMENTS.length} famous monuments from all ${states.size} states and union territories. Tap one to learn more!`;
+      `${MONUMENTS.length} iconic monuments from all ${states.size} states and union territories — each one a gallery in India's living museum.`;
 
     function render() {
       const q = search.value.trim().toLowerCase();
