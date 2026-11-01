@@ -152,6 +152,8 @@ a { color: var(--gold-light); }
 /* ---------- Footer ---------- */
 footer { text-align: center; color: var(--parchment-2); font-size: .85rem; padding: 34px 0 0; }
 footer .skyline { margin-top: 18px; height: 54px; opacity: .55; }
+footer .made-by { margin-top: 6px; }
+footer .disclaimer { max-width: 40em; margin: 12px auto 0; font-size: .75rem; line-height: 1.45; opacity: .8; }
 footer .band { margin-top: 0; }
 
 /* ---------- Monument page ---------- */
@@ -384,6 +386,30 @@ footer .band { margin-top: 0; }
 .trad-icon { display: grid; place-items: center; font-size: 3.4rem; background: radial-gradient(circle, #fff6dc, var(--parchment-2)); }
 .trad strong { display: block; margin-top: 6px; font: 700 .85rem/1.2 var(--display); color: var(--maroon); }
 .trad span { font-size: .75rem; color: var(--ink-soft); }
+button.trad { font: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button.trad:hover img, button.trad:focus-visible img { border-color: var(--maroon); transform: translateY(-2px); }
+button.trad img { transition: transform .15s; }
+button.trad:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 10px; }
+
+/* fact card that pops up when a tradition's picture is tapped */
+.trad-card {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 0; overflow: auto;
+  background: linear-gradient(var(--parchment), var(--parchment-2)); color: var(--ink);
+  border: 3px solid var(--gold); border-radius: 16px; box-shadow: 0 0 0 4px var(--maroon), 0 20px 50px rgba(0, 0, 0, .6);
+}
+.trad-card::backdrop { background: rgba(10, 16, 36, .75); }
+.trad-card > img, .trad-card > .trad-icon { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.trad-card > .trad-icon { display: grid; aspect-ratio: 16 / 9; border: 0; border-radius: 0; box-shadow: none; }
+.trad-card .trad-icon.big { font-size: 5rem; }
+.trad-card .card-body { padding: 14px 18px 16px; }
+.trad-card h2 { margin: 0; font: 700 1.3rem/1.2 var(--display); color: var(--maroon); text-align: center; }
+.trad-card .badges { text-align: center; margin: 8px 0 14px; }
+.trad-card .credit { color: var(--ink-soft); text-align: center; }
+.trad-card .close {
+  position: sticky; top: 8px; float: right; margin: 8px 8px -44px 0; z-index: 3;
+  width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--gold);
+  background: var(--navy); color: var(--gold-light); font-size: 1rem; cursor: pointer;
+}
 .scripts { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
 .scripts div { text-align: center; padding: 8px 4px; border-radius: 10px; background: rgba(255, 255, 255, .55); border: 1px solid rgba(224, 176, 75, .6); }
 .scripts b { display: block; font: 600 1.3rem/1.4 "Noto Sans", "Nirmala UI", system-ui, sans-serif; color: var(--maroon); }

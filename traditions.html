@@ -74,6 +74,8 @@
 
    </div>
 
+    <dialog class="trad-card" id="trad-card" aria-labelledby="trad-card-title"></dialog>
+
     <details class="credits">
       <summary>Photo credits</summary>
       <div id="credits"></div>
@@ -81,7 +83,8 @@
   </main>
 
   <footer>
-    <div class="wrap">A 9th-grade school project · India, A Living Museum · Photos from Wikimedia Commons</div>
+    <div class="wrap">Timiksha Priyal, 9G, DPS Mathura Road · India, A Living Museum · Photos from Wikimedia Commons</div>
+    <div class="wrap"><p class="disclaimer"><b>Disclaimer:</b> This website was made with the help of Claude, an AI assistant by Anthropic. The facts come from public sources and may contain mistakes, so please check important details with your textbook or teacher.</p></div>
     <div class="skyline" aria-hidden="true"></div>
     <div class="band" aria-hidden="true"></div>
   </footer>
@@ -108,17 +111,51 @@
           <p class="lead">${lead} <span class="hint">Swipe →</span></p>
           <div class="trad-row">
             ${items.map(t => `
-              <a class="trad" href="index.html?state=${encodeURIComponent(t.state)}#map" title="See ${esc(t.state)} on the map">
+              <button type="button" class="trad" data-id="${esc(t.id)}" aria-haspopup="dialog">
                 ${credit(t.id)
                   ? `<img src="images/traditions/thumbs/${esc(t.id)}.jpg" alt="${esc(t.name)}" loading="lazy" width="480" height="360">`
                   : `<div class="trad-icon" aria-hidden="true">${t.icon}</div>`}
-                <strong>${esc(t.name)}</strong><span>${esc(t.state)}</span>
-              </a>`).join("")}
+                <strong>${esc(t.name)}</strong><span>${esc(t.state)} · tap for facts</span>
+              </button>`).join("")}
           </div>
         </section>`;
     }).join("");
 
     if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+
+    // ---- Fact card: opens when a picture is tapped ----
+    const dlg = document.getElementById("trad-card");
+    function openTradition(id) {
+      const t = TRADITIONS.find(x => x.id === id);
+      if (!t) return;
+      const c = credit(t.id);
+      dlg.innerHTML = `
+        <button type="button" class="close" aria-label="Close">✕</button>
+        ${c ? `<img src="images/traditions/${esc(t.id)}.jpg" alt="${esc(t.name)}" width="960" height="720">`
+            : `<div class="trad-icon big" aria-hidden="true">${t.icon}</div>`}
+        <div class="card-body">
+          <h2 id="trad-card-title">${t.icon} ${esc(t.name)}</h2>
+          <p class="badges"><span class="badge">${esc(t.kind === "Dance" ? "Dance & Music" : t.kind)}</span><span class="badge">${esc(t.state)}</span></p>
+          <ol class="fun">${(t.facts || []).map(f => `<li>${esc(f)}</li>`).join("")}</ol>
+          <p class="center"><a class="btn" href="index.html?state=${encodeURIComponent(t.state)}#map">🗺️ See ${esc(t.state)} on the map</a></p>
+          ${c ? `<p class="credit">Photo: ${esc(c.artist)} · <a href="${esc(c.page)}" target="_blank" rel="noopener">${esc(c.license)}</a></p>` : ""}
+        </div>`;
+      dlg.querySelector(".close").addEventListener("click", () => dlg.close());
+      dlg.showModal();
+      dlg.scrollTop = 0;
+    }
+    document.getElementById("kinds").addEventListener("click", e => {
+      const card = e.target.closest(".trad[data-id]");
+      if (card) openTradition(card.dataset.id);
+    });
+    // tap the dark area outside the card to close it
+    dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+    // traditions.html?t=garba opens that card straight away (used by the home page)
+    const startId = new URLSearchParams(location.search).get("t");
+    if (startId) {
+      document.querySelector(`.trad[data-id="${CSS.escape(startId)}"]`)?.scrollIntoView({ block: "center" });
+      openTradition(startId);
+    }
 
     const LANGS = ["Assamese", "Bengali", "Bodo", "Dogri", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Maithili", "Malayalam",
                    "Manipuri", "Marathi", "Nepali", "Odia", "Punjabi", "Sanskrit", "Santali", "Sindhi", "Tamil", "Telugu", "Urdu"];

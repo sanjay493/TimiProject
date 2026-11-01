@@ -1,6 +1,6 @@
 # Monuments of India 🇮🇳
 
-A mobile-friendly website about famous monuments in **every state and union territory of India**, made for a 9th-grade school project.
+A mobile-friendly website about famous monuments in **every state and union territory of India**, made as a school project by Timiksha Priyal, 9G, DPS Mathura Road, with the help of Claude (an AI assistant by Anthropic).
 Visitors at the stall scan a **QR code** next to each display, and the monument's page opens on their phone, with a photo, the main facts and some interesting facts.
 
 **Live site:** https://sanjay493.github.io/TimiProject/
@@ -19,7 +19,7 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 | `passport.html` | Heritage Passport: the stamps a visitor has collected, and a prize message |
 | `qr-sheet.html` | Printable QR codes: small cut-outs, or one large sign per page |
 | `js/data.js` | **All the monument content.** Edit this to change facts or add monuments |
-| `js/traditions.js` | Dances, art forms and festivals, used by the Traditions page, the games and the map |
+| `js/traditions.js` | Dances, art forms and festivals with 3 facts each (shown when a picture is tapped on the Traditions page), also used by the games and the map |
 | `js/tradition-credits.js` | Photo credits for traditions (made automatically) |
 | `images/traditions/` | Tradition photos (from Wikimedia Commons) |
 | `js/india-map.js` | State outlines for the map (from [@svg-maps/india](https://github.com/VictorCazanave/svg-maps), CC BY 4.0) |

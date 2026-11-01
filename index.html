@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>India · A Living Museum</title>
-  <meta name="description" content="India – A Living Museum: famous monuments from every state and union territory, with photos, facts, a map and games. A 9th-grade school project.">
+  <meta name="description" content="India – A Living Museum: famous monuments from every state and union territory, with photos, facts, a map and games. A school project by Timiksha Priyal, 9G, DPS Mathura Road.">
   <meta name="theme-color" content="#13203f">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,9 +126,10 @@
 
   <footer>
     <div class="wrap">
-      A 9th-grade school project · Photos from Wikimedia Commons (credits on each page)<br>
+      Timiksha Priyal, 9G, DPS Mathura Road · Photos from Wikimedia Commons (credits on each page)<br>
       Map outlines: <a href="https://github.com/VictorCazanave/svg-maps">@svg-maps/india</a>, CC BY 4.0
     </div>
+    <div class="wrap"><p class="disclaimer"><b>Disclaimer:</b> This website was made with the help of Claude, an AI assistant by Anthropic. The facts come from public sources and may contain mistakes, so please check important details with your textbook or teacher.</p></div>
     <div class="skyline" aria-hidden="true"></div>
     <div class="band" aria-hidden="true"></div>
   </footer>
@@ -265,7 +266,7 @@
       <div class="panel" style="margin:0">
         <h2>${title}</h2>
         <div class="trad-three">${ids.map(id => TRADITIONS.find(t => t.id === id)).filter(Boolean).map(t => `
-          <a class="trad" href="traditions.html">
+          <a class="trad" href="traditions.html?t=${encodeURIComponent(t.id)}">
             ${hasPhoto(t.id) ? `<img src="images/traditions/thumbs/${esc(t.id)}.jpg" alt="${esc(t.name)}" loading="lazy" width="480" height="360">`
                              : `<div class="trad-icon" aria-hidden="true">${t.icon}</div>`}
             <strong>${esc(t.name.replace(/ (painting|dance)$/, ""))}</strong><span>${esc(t.state)}</span>
