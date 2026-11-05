@@ -147,18 +147,19 @@ const MONUMENTS = [
     ]
   },
   {
-    id: "jagannath-temple-ranchi", name: "Jagannath Temple, Ranchi", state: "Jharkhand", region: "State",
-    wiki: "Jagannath Temple, Ranchi",
-    location: "Jagannathpur, Ranchi",
-    builtBy: "King Thakur Ani Nath Shahdeo of Barkagarh",
-    period: "1691",
-    style: "Kalinga style, similar to the Puri Jagannath Temple",
+    id: "palamu-fort", name: "Palamu Fort", state: "Jharkhand", region: "State",
+    image: "Palamu quila 1.jpg",
+    wiki: "Palamu fort",
+    location: "Betla National Park, Latehar district",
+    builtBy: "Kings of the Chero dynasty; the new fort was built by Raja Medini Ray",
+    period: "Mainly 17th century (Medini Ray ruled 1658 to 1674)",
+    style: "Medieval hill and plains forts built with lime and surkhi mortar",
     unesco: "No",
     facts: [
-      "It looks like a smaller version of the famous Jagannath Temple in Puri, Odisha.",
-      "A big Rath Yatra (chariot festival) and fair are held here every year.",
-      "The temple stands on top of a small hill.",
-      "People from tribal and non-tribal communities both take part in its festivals."
+      "There are really two forts: an old one on the plains and a new one on a nearby hill, both overlooking the Auranga River.",
+      "The ruins stand deep in the forest of Betla National Park, a well-known tiger reserve area.",
+      "The largest of the old fort's three gates is called the 'Singh Dwar'.",
+      "The British East India Company attacked the forts in 1771 and took them after a long fight with the Chero soldiers."
     ]
   },
   {
@@ -221,21 +222,6 @@ const MONUMENTS = [
       "It is about 26 metres tall and faces the Arabian Sea.",
       "The last British troops left India by passing through it in 1948.",
       "It is made of yellow basalt stone."
-    ]
-  },
-  {
-    id: "ajanta-caves", name: "Ajanta Caves", state: "Maharashtra", region: "State",
-    wiki: "Ajanta Caves",
-    location: "Near Chhatrapati Sambhajinagar (Aurangabad)",
-    builtBy: "Buddhist monks and royal patrons",
-    period: "2nd century BCE to about 480 CE",
-    style: "Rock-cut Buddhist caves",
-    unesco: "Yes — World Heritage Site (1983)",
-    facts: [
-      "There are about 30 caves carved into a horseshoe-shaped cliff.",
-      "The paintings inside tell the Jataka tales — stories of the Buddha's past lives.",
-      "The caves were forgotten for centuries and rediscovered by a British officer, John Smith, in 1819 while hunting a tiger.",
-      "The paintings are among the finest examples of ancient Indian art."
     ]
   },
   {
@@ -514,21 +500,6 @@ const MONUMENTS = [
       "It has five storeys, each with a balcony.",
       "Nearby stands the Iron Pillar, about 1,600 years old, which has hardly rusted.",
       "Verses from the Quran are carved on its walls."
-    ]
-  },
-  {
-    id: "red-fort", name: "Red Fort", state: "Delhi", region: "Union Territory",
-    wiki: "Red Fort",
-    location: "Old Delhi",
-    builtBy: "Mughal Emperor Shah Jahan",
-    period: "1639–1648",
-    style: "Mughal architecture",
-    unesco: "Yes — World Heritage Site (2007)",
-    facts: [
-      "Every Independence Day, the Prime Minister raises the national flag here.",
-      "It is made of red sandstone, which gives it its name.",
-      "Its original name was 'Qila-e-Mubarak' (the Blessed Fort).",
-      "The famous Peacock Throne was kept here until Nadir Shah took it away in 1739."
     ]
   },
   {

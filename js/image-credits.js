@@ -63,10 +63,10 @@ const IMAGE_CREDITS = {
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
   },
-  "jagannath-temple-ranchi": {
-    "file": "images/jagannath-temple-ranchi.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:17th_century_Jagannath_temple_Ranchi_Jharkhand_-_9.jpg",
-    "artist": "Ms Sarah Welch",
+  "palamu-fort": {
+    "file": "images/palamu-fort.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Palamu_quila_1.jpg",
+    "artist": "Marian kispotta",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
   },
@@ -97,13 +97,6 @@ const IMAGE_CREDITS = {
     "artist": "A.Savin",
     "license": "FAL",
     "licenseUrl": "http://artlibre.org/licence/lal/en"
-  },
-  "ajanta-caves": {
-    "file": "images/ajanta-caves.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Ajanta_(63).jpg",
-    "artist": "No machine-readable author provided. Soman assumed (based on copyright claims).",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5"
   },
   "kangla-fort": {
     "file": "images/kangla-fort.jpg",
@@ -230,13 +223,6 @@ const IMAGE_CREDITS = {
     "artist": "Wasir kasab",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0"
-  },
-  "red-fort": {
-    "file": "images/red-fort.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Delhi_fort.jpg",
-    "artist": "PerSona77",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
   },
   "martand-sun-temple": {
     "file": "images/martand-sun-temple.jpg",

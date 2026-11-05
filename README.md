@@ -1,6 +1,6 @@
 # Monuments of India 🇮🇳
 
-A mobile-friendly website about famous monuments in **every state and union territory of India**, made as a school project by Timiksha Priyal, 9G, DPS Mathura Road, with the help of Claude (an AI assistant by Anthropic).
+A mobile-friendly website about 36 famous monuments, **one for each state and union territory of India**, made as a school project by Timiksha Priyal, 9G, DPS Mathura Road, with the help of Claude (an AI assistant by Anthropic).
 Visitors at the stall scan a **QR code** next to each display, and the monument's page opens on their phone, with a photo, the main facts and some interesting facts.
 
 **Live site:** https://sanjay493.github.io/TimiProject/
@@ -18,6 +18,7 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 | `spin.html` | Spin & Answer: spin the wheel, answer a quiz question |
 | `passport.html` | Heritage Passport: the stamps a visitor has collected, and a prize message |
 | `qr-sheet.html` | Printable QR codes: small cut-outs, or one large sign per page |
+| `monument-qr-cards-a4.pdf` | Ready to print: each monument's photo with its QR code, 3 per A4 page (12 pages) |
 | `js/data.js` | **All the monument content.** Edit this to change facts or add monuments |
 | `js/traditions.js` | Dances, art forms and festivals with 3 facts each (shown when a picture is tapped on the Traditions page), also used by the games and the map |
 | `js/tradition-credits.js` | Photo credits for traditions (made automatically) |
@@ -31,6 +32,7 @@ Visitors at the stall scan a **QR code** next to each display, and the monument'
 | `qr/` | QR code images, one per monument plus `home.png` |
 | `tools/fetch_images.py` | Downloads free photos from Wikimedia Commons |
 | `tools/make_qr.py` | Makes the QR code images |
+| `tools/make_pdf.py` | Makes `monument-qr-cards-a4.pdf` |
 
 It's plain HTML, CSS and JavaScript, so there's nothing to build or install for the website itself.
 
@@ -45,6 +47,10 @@ It's plain HTML, CSS and JavaScript, so there's nothing to build or install for 
 Every time you push changes to `main`, the website updates by itself within a minute or two. The QR codes stay the same, so you don't need to print them again.
 
 ## Print the QR codes
+
+For photo-and-QR cards, print `monument-qr-cards-a4.pdf` at **100% / actual size** on A4. It has 3 monuments on each page. If you change the monuments, remake it with `pip install reportlab`, then `python tools/make_pdf.py`.
+
+For QR codes only:
 
 1. Open `https://sanjay493.github.io/TimiProject/qr-sheet.html` (or open `qr-sheet.html` on your computer).
 2. Choose **Small** (many per page, cut them out) or **Large** (one big sign per page).
@@ -72,6 +78,7 @@ The state outlines come from a map made before 2019. In it, Jammu & Kashmir and 
    pip install "qrcode[pil]"
    python tools/fetch_images.py
    python tools/make_qr.py
+   python tools/make_pdf.py
    ```
 
    If the photo it picks isn't good, find a better one on [Wikimedia Commons](https://commons.wikimedia.org) and add it to the monument, e.g. `image: "Mysore Palace Morning.jpg",`, then run `fetch_images.py` again.
